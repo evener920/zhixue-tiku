@@ -1,0 +1,6 @@
+.workbuddy/
+node_modules/
+server.js
+server.log
+*.log
+.DS_Store

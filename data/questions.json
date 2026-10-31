@@ -1,0 +1,893 @@
+{
+  "version": "3.0",
+  "grades": [
+    "小学",
+    "初中",
+    "高中"
+  ],
+  "subjects": [
+    {
+      "id": "sub_chinese",
+      "name": "语文",
+      "icon": "📕",
+      "color": "#e0533d",
+      "boards": [
+        {
+          "id": "cn_read",
+          "name": "阅读",
+          "type": "reading",
+          "desc": "现代文阅读，训练提取信息、概括与推断。",
+          "passages": [
+            {
+              "id": "cn_read_p1",
+              "title": "小松鼠过冬",
+              "grade": "小学",
+              "text": "秋天到了，树林里的果子越来越少。小松鼠蹦蹦一边储藏松果，一边发愁：冬天那么长，这些够吃吗？妈妈笑着说：“别担心，我们每天存一点，慢慢就够啦。”\n果然，整个冬天，蹦蹦靠着秋天存下的松果，过得又暖和又饱足。它明白了：提前准备，比临时着急更有用。",
+              "questions": [
+                {
+                  "id": "cn_read_p1_q1",
+                  "type": "single",
+                  "stem": "小松鼠发愁的原因是？",
+                  "options": [
+                    "冬天太长，怕果子不够吃",
+                    "找不到妈妈",
+                    "不爱吃松果",
+                    "天气太热"
+                  ],
+                  "answer": 0,
+                  "explanation": "文中写小松鼠“发愁：冬天那么长，这些够吃吗”，即担心食物不足。",
+                  "difficulty": "易",
+                  "tags": [
+                    "童话",
+                    "主旨"
+                  ]
+                },
+                {
+                  "id": "cn_read_p1_q2",
+                  "type": "single",
+                  "stem": "妈妈告诉小松鼠要怎么做？",
+                  "options": [
+                    "每天存一点",
+                    "去向别人要",
+                    "不用准备",
+                    "等冬天再找"
+                  ],
+                  "answer": 0,
+                  "explanation": "妈妈说“我们每天存一点，慢慢就够啦”。",
+                  "difficulty": "易",
+                  "tags": [
+                    "细节"
+                  ]
+                },
+                {
+                  "id": "cn_read_p1_q3",
+                  "type": "single",
+                  "stem": "这个故事告诉我们什么道理？",
+                  "options": [
+                    "临时着急没用，要提前准备",
+                    "松果不好吃",
+                    "冬天其实很短",
+                    "妈妈不会帮忙"
+                  ],
+                  "answer": 0,
+                  "explanation": "结尾点明“提前准备，比临时着急更有用”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "道理"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            },
+            {
+              "id": "cn_read_p2",
+              "title": "坚持的力量",
+              "grade": "初中",
+              "text": "有个年轻人向一位书法家请教成功的秘诀。书法家让他每天写一百个大字，坚持一个月。年轻人照做了，可一个月后水平并无明显长进，便想放弃。\n书法家问他：“你写的纸用了多少？”年轻人说：“三十张。”书法家说：“再写三十张，再来问我。”又过一个月，年轻人的字果然有了神采。\n原来，所谓的天赋，常常是看不见的日积月累。把一件简单的事重复做、认真做，时间自会给出答案。",
+              "questions": [
+                {
+                  "id": "cn_read_p2_q1",
+                  "type": "single",
+                  "stem": "年轻人最初为什么想放弃？",
+                  "options": [
+                    "水平没有明显长进",
+                    "书法家批评了他",
+                    "没有纸了",
+                    "他觉得太累"
+                  ],
+                  "answer": 0,
+                  "explanation": "文中写“一个月后水平并无明显长进，便想放弃”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "叙事"
+                  ]
+                },
+                {
+                  "id": "cn_read_p2_q2",
+                  "type": "single",
+                  "stem": "书法家让年轻人再写三十张，是为了？",
+                  "options": [
+                    "惩罚他",
+                    "让他继续积累练习",
+                    "浪费纸张",
+                    "拖延时间"
+                  ],
+                  "answer": 1,
+                  "explanation": "后续年轻人字“有了神采”，说明是让他继续积累。",
+                  "difficulty": "中",
+                  "tags": [
+                    "推断"
+                  ]
+                },
+                {
+                  "id": "cn_read_p2_q3",
+                  "type": "single",
+                  "stem": "本文主要说明什么？",
+                  "options": [
+                    "天赋决定一切",
+                    "日积月累的坚持很重要",
+                    "书法家很严厉",
+                    "写字很简单"
+                  ],
+                  "answer": 1,
+                  "explanation": "结尾点明“天赋常常是看不见的日积月累”。",
+                  "difficulty": "难",
+                  "tags": [
+                    "主旨"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            },
+            {
+              "id": "cn_read_p3",
+              "title": "信息时代的专注力",
+              "grade": "高中",
+              "text": "打开手机，平均不到十分钟我们就会忍不住看一眼通知；读完一篇长文前，手指已经滑向了下一条短视频。注意力，正在成为这个时代最稀缺的资源。\n研究表明，频繁的任务切换会显著拖慢思考深度。当我们一边回消息一边写报告，表面高效，实则错误率上升、创意下降。真正的专注，不是更长时间地坐在桌前，而是主动屏蔽干扰、为重要的事留出整块时间。\n保护专注力，或许从关掉一个不必要的推送开始。",
+              "questions": [
+                {
+                  "id": "cn_read_p3_q1",
+                  "type": "single",
+                  "stem": "作者认为当下最稀缺的资源是？",
+                  "options": [
+                    "金钱",
+                    "注意力",
+                    "时间",
+                    "能源"
+                  ],
+                  "answer": 1,
+                  "explanation": "文中直接说“注意力，正在成为这个时代最稀缺的资源”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "议论"
+                  ]
+                },
+                {
+                  "id": "cn_read_p3_q2",
+                  "type": "single",
+                  "stem": "频繁的任务切换会导致？",
+                  "options": [
+                    "思考更深入",
+                    "错误率上升、创意下降",
+                    "效率翻倍",
+                    "更加专注"
+                  ],
+                  "answer": 1,
+                  "explanation": "第二段指出“错误率上升、创意下降”。",
+                  "difficulty": "难",
+                  "tags": [
+                    "分析"
+                  ]
+                },
+                {
+                  "id": "cn_read_p3_q3",
+                  "type": "single",
+                  "stem": "作者建议如何保护专注力？",
+                  "options": [
+                    "多开几个推送",
+                    "主动屏蔽干扰、留出整块时间",
+                    "不停切换任务",
+                    "少睡觉"
+                  ],
+                  "answer": 1,
+                  "explanation": "第三段提出“主动屏蔽干扰、为重要的事留出整块时间”。",
+                  "difficulty": "难",
+                  "tags": [
+                    "建议"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            }
+          ]
+        },
+        {
+          "id": "cn_poem",
+          "name": "古诗文",
+          "type": "reading",
+          "desc": "课内古诗文默写与赏析。",
+          "passages": [
+            {
+              "id": "cn_poem_p1",
+              "title": "《静夜思》李白",
+              "grade": "初中",
+              "text": "《静夜思》［唐］李白\n床前明月光，疑是地上霜。\n举头望明月，低头思故乡。",
+              "questions": [
+                {
+                  "id": "cn_poem_p1_q1",
+                  "type": "single",
+                  "stem": "这首诗的作者是？",
+                  "options": [
+                    "李白",
+                    "杜甫",
+                    "白居易",
+                    "王维"
+                  ],
+                  "answer": 0,
+                  "explanation": "诗题已标明作者为李白。",
+                  "difficulty": "易",
+                  "tags": [
+                    "作者"
+                  ]
+                },
+                {
+                  "id": "cn_poem_p1_q2",
+                  "type": "single",
+                  "stem": "这首诗主要表达了诗人怎样的情感？",
+                  "options": [
+                    "思念故乡",
+                    "喜爱春天",
+                    "赞美山水",
+                    "忧国忧民"
+                  ],
+                  "answer": 0,
+                  "explanation": "末句“低头思故乡”点明思乡之情。",
+                  "difficulty": "易",
+                  "tags": [
+                    "情感"
+                  ]
+                },
+                {
+                  "id": "cn_poem_p1_q3",
+                  "type": "single",
+                  "stem": "“疑是地上霜”中的“疑”意思是？",
+                  "options": [
+                    "好像",
+                    "怀疑",
+                    "确定",
+                    "害怕"
+                  ],
+                  "answer": 0,
+                  "explanation": "“疑”在此处意为“好像、仿佛”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "词义"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            }
+          ]
+        },
+        {
+          "id": "cn_basic",
+          "name": "基础知识",
+          "type": "practice",
+          "desc": "字词音形义与语言运用。",
+          "passages": [
+            {
+              "id": "cn_basic_p1",
+              "title": "基础知识练习",
+              "grade": "初中",
+              "text": "",
+              "questions": [
+                {
+                  "id": "cn_basic_p1_q1",
+                  "type": "single",
+                  "stem": "下列词语中没有错别字的是？",
+                  "options": [
+                    "再接再厉",
+                    "迫不急待",
+                    "一如继往",
+                    "默守成规"
+                  ],
+                  "answer": 0,
+                  "explanation": "其余应为：迫不及待、一如既往、墨守成规。",
+                  "difficulty": "中",
+                  "tags": [
+                    "错别字"
+                  ]
+                },
+                {
+                  "id": "cn_basic_p1_q2",
+                  "type": "single",
+                  "stem": "“举一反三”中“反”的意思是？",
+                  "options": [
+                    "类推",
+                    "相反",
+                    "返回",
+                    "反抗"
+                  ],
+                  "answer": 0,
+                  "explanation": "“举一反三”指从一件事类推而知许多事。",
+                  "difficulty": "中",
+                  "tags": [
+                    "词义"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sub_math",
+      "name": "数学",
+      "icon": "📐",
+      "color": "#2f9e6e",
+      "boards": [
+        {
+          "id": "math_wrong",
+          "name": "错题",
+          "type": "practice",
+          "desc": "归集日常错题，反复重练。",
+          "passages": [
+            {
+              "id": "math_wrong_p1",
+              "title": "错题本 · 折扣问题",
+              "grade": "初中",
+              "text": "某商品原价 100 元，打八折后售价多少元？",
+              "questions": [
+                {
+                  "id": "math_wrong_p1_q1",
+                  "type": "fill",
+                  "stem": "打八折后的售价是 ____ 元。",
+                  "answer": "80",
+                  "explanation": "100 × 0.8 = 80（元）。",
+                  "difficulty": "易",
+                  "tags": [
+                    "百分数",
+                    "折扣"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            },
+            {
+              "id": "math_wrong_p2",
+              "title": "错题本 · 导数",
+              "grade": "高中",
+              "text": "已知函数 f(x) = x²，求 f'(2)。",
+              "questions": [
+                {
+                  "id": "math_wrong_p2_q1",
+                  "type": "fill",
+                  "stem": "f'(2) = ____。",
+                  "answer": "4",
+                  "explanation": "f'(x) = 2x，故 f'(2) = 4。",
+                  "difficulty": "中",
+                  "tags": [
+                    "导数"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            }
+          ]
+        },
+        {
+          "id": "math_drill",
+          "name": "专项练习",
+          "type": "practice",
+          "desc": "针对薄弱考点专项突破。",
+          "passages": [
+            {
+              "id": "math_drill_p1",
+              "title": "专项 · 一元一次方程",
+              "grade": "初中",
+              "text": "解方程：2x + 3 = 11。",
+              "questions": [
+                {
+                  "id": "math_drill_p1_q1",
+                  "type": "fill",
+                  "stem": "方程的解为 x = ____。",
+                  "answer": "4",
+                  "explanation": "2x = 8，x = 4。",
+                  "difficulty": "易",
+                  "tags": [
+                    "方程"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            }
+          ]
+        },
+        {
+          "id": "math_exam",
+          "name": "真题卷",
+          "type": "practice",
+          "desc": "历年真题演练。",
+          "passages": [
+            {
+              "id": "math_exam_p1",
+              "title": "真题 · 集合",
+              "grade": "高中",
+              "text": "已知集合 A = {1, 2}，B = {2, 3}。",
+              "questions": [
+                {
+                  "id": "math_exam_p1_q1",
+                  "type": "single",
+                  "stem": "A ∩ B = ?",
+                  "options": [
+                    "{2}",
+                    "{1}",
+                    "{1, 2, 3}",
+                    "∅"
+                  ],
+                  "answer": 0,
+                  "explanation": "交集取两集合公共元素，即 {2}。",
+                  "difficulty": "易",
+                  "tags": [
+                    "集合"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sub_english",
+      "name": "英语",
+      "icon": "🔤",
+      "color": "#3b6ef5",
+      "boards": [
+        {
+          "id": "en_listen",
+          "name": "听力",
+          "type": "listening",
+          "desc": "对话与播报，听音抓关键信息。",
+          "passages": [
+            {
+              "id": "en_listen_p1",
+              "title": "At the Zoo（在动物园）",
+              "grade": "小学",
+              "text": "Listen to the dialogue.\nA: Look, a big elephant! Do you like elephants?\nB: Yes! And I like the red balloon in my hand.\nA: How many balloons do you have?\nB: I have three. One red, one blue, and one yellow.\nA: Great! Let's see the pandas next.",
+              "questions": [
+                {
+                  "id": "en_listen_p1_q1",
+                  "type": "single",
+                  "stem": "他们首先看到什么动物？",
+                  "options": [
+                    "大象 Elephant",
+                    "熊猫 Panda",
+                    "老虎 Tiger",
+                    "狮子 Lion"
+                  ],
+                  "answer": 0,
+                  "explanation": "A 说 “Look, a big elephant!”",
+                  "difficulty": "易",
+                  "tags": [
+                    "数字",
+                    "动物"
+                  ]
+                },
+                {
+                  "id": "en_listen_p1_q2",
+                  "type": "single",
+                  "stem": "B 手里有几个气球？",
+                  "options": [
+                    "两个",
+                    "三个",
+                    "四个",
+                    "一个"
+                  ],
+                  "answer": 1,
+                  "explanation": "B 说 “I have three.”",
+                  "difficulty": "易",
+                  "tags": [
+                    "数字"
+                  ]
+                },
+                {
+                  "id": "en_listen_p1_q3",
+                  "type": "single",
+                  "stem": "其中一个气球是什么颜色？",
+                  "options": [
+                    "绿色",
+                    "红色",
+                    "黑色",
+                    "白色"
+                  ],
+                  "answer": 1,
+                  "explanation": "B 说有 “one red, one blue, and one yellow”，包含红色。",
+                  "difficulty": "中",
+                  "tags": [
+                    "颜色"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            },
+            {
+              "id": "en_listen_p2",
+              "title": "A Phone Call（一通电话）",
+              "grade": "初中",
+              "text": "Listen to the phone call.\nMom: Hi sweetie, how was your exam today?\nTom: It was okay, but math was a bit hard.\nMom: Don't worry. Did you eat lunch?\nTom: Yes, I had noodles with Lisa at twelve.\nMom: Good. I'll pick you up at five. Love you!\nTom: Love you too, Mom.",
+              "questions": [
+                {
+                  "id": "en_listen_p2_q1",
+                  "type": "single",
+                  "stem": "Tom 觉得考试怎么样？",
+                  "options": [
+                    "数学有点难",
+                    "非常简单",
+                    "没及格",
+                    "没参加"
+                  ],
+                  "answer": 0,
+                  "explanation": "Tom 说 “math was a bit hard”。",
+                  "difficulty": "易",
+                  "tags": [
+                    "日常"
+                  ]
+                },
+                {
+                  "id": "en_listen_p2_q2",
+                  "type": "single",
+                  "stem": "Tom 午饭吃了什么？",
+                  "options": [
+                    "面条 Noodles",
+                    "米饭 Rice",
+                    "面包 Bread",
+                    "披萨 Pizza"
+                  ],
+                  "answer": 0,
+                  "explanation": "Tom 说 “I had noodles with Lisa”。",
+                  "difficulty": "易",
+                  "tags": [
+                    "饮食"
+                  ]
+                },
+                {
+                  "id": "en_listen_p2_q3",
+                  "type": "single",
+                  "stem": "妈妈几点来接 Tom？",
+                  "options": [
+                    "五点",
+                    "十二点",
+                    "三点",
+                    "八点"
+                  ],
+                  "answer": 0,
+                  "explanation": "Mom 说 “I'll pick you up at five.”",
+                  "difficulty": "中",
+                  "tags": [
+                    "时间"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            },
+            {
+              "id": "en_listen_p3",
+              "title": "A Weather Report（天气预报）",
+              "grade": "高中",
+              "text": "Listen to the short weather report.\nGood morning. Today will be mostly sunny with a high of twenty-two degrees. Winds will be light from the west. Tonight, clouds will move in and there is a thirty percent chance of rain after midnight. Tomorrow looks cooler, around seventeen degrees, with showers in the afternoon. If you plan to travel, expect some delays after lunch. Have a great day!",
+              "questions": [
+                {
+                  "id": "en_listen_p3_q1",
+                  "type": "single",
+                  "stem": "今天的最高气温是多少？",
+                  "options": [
+                    "17度",
+                    "22度",
+                    "30度",
+                    "12度"
+                  ],
+                  "answer": 1,
+                  "explanation": "播报说 “a high of twenty-two degrees”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "天气"
+                  ]
+                },
+                {
+                  "id": "en_listen_p3_q2",
+                  "type": "single",
+                  "stem": "今晚可能什么时候下雨？",
+                  "options": [
+                    "中午前",
+                    "午夜后",
+                    "早上",
+                    "不会下雨"
+                  ],
+                  "answer": 1,
+                  "explanation": "有 “a thirty percent chance of rain after midnight”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "天气"
+                  ]
+                },
+                {
+                  "id": "en_listen_p3_q3",
+                  "type": "single",
+                  "stem": "明天出行可能遇到什么？",
+                  "options": [
+                    "没有延误",
+                    "午饭后有些延误",
+                    "航班取消",
+                    "路况完美"
+                  ],
+                  "answer": 1,
+                  "explanation": "播报提醒 “expect some delays after lunch”。",
+                  "difficulty": "难",
+                  "tags": [
+                    "推断"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            }
+          ]
+        },
+        {
+          "id": "en_read",
+          "name": "阅读",
+          "type": "reading",
+          "desc": "说明与思辨短文，训练主旨与态度。",
+          "passages": [
+            {
+              "id": "en_read_p1",
+              "title": "The Internet and Us",
+              "grade": "初中",
+              "text": "The internet has changed how we learn, shop, and talk to friends. With a phone, we can watch videos, send messages, and find answers in seconds. This convenience is amazing.\nHowever, spending too much time online can hurt us. Some people scroll for hours and forget to sleep or meet friends in real life. Others believe everything they read without checking.\nThe key is balance. Use the internet as a tool, not a master. When we control our screen time, technology helps us instead of controlling us.",
+              "questions": [
+                {
+                  "id": "en_read_p1_q1",
+                  "type": "single",
+                  "stem": "What is the main idea of the first paragraph?",
+                  "options": [
+                    "The internet is only for fun",
+                    "The internet brings great convenience",
+                    "Phones are dangerous",
+                    "We should avoid the internet"
+                  ],
+                  "answer": 1,
+                  "explanation": "首段讲手机能看视频、发消息、秒查答案，“This convenience is amazing”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "主旨"
+                  ]
+                },
+                {
+                  "id": "en_read_p1_q2",
+                  "type": "single",
+                  "stem": "According to the passage, a problem of too much online time is that people ___.",
+                  "options": [
+                    "learn faster",
+                    "may forget to sleep or meet friends",
+                    "save more money",
+                    "read more books"
+                  ],
+                  "answer": 1,
+                  "explanation": "第二段说有人“forget to sleep or meet friends in real life”。",
+                  "difficulty": "中",
+                  "tags": [
+                    "细节"
+                  ]
+                },
+                {
+                  "id": "en_read_p1_q3",
+                  "type": "single",
+                  "stem": "What does the author suggest?",
+                  "options": [
+                    "Use the internet with balance",
+                    "Delete all apps",
+                    "Never go online",
+                    "Buy a new phone"
+                  ],
+                  "answer": 0,
+                  "explanation": "末段首句 “The key is balance.”",
+                  "difficulty": "难",
+                  "tags": [
+                    "态度"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            },
+            {
+              "id": "en_read_p2",
+              "title": "The Quiet Power of Reading",
+              "grade": "高中",
+              "text": "Reading is often praised for building vocabulary, but its deeper value lies elsewhere. When we read a novel, we temporarily step into another person's mind. This mental simulation of others' thoughts and feelings strengthens what psychologists call “theory of mind” — the ability to understand that other people may hold beliefs different from our own.\nA growing body of research suggests that frequent readers are better at reading social cues and showing empathy in real life. In one study, people who read literary fiction performed better on tests measuring social perception than those who read non-fiction or nothing at all.\nNone of this requires speed. In fact, slow, attentive reading may matter more than the number of books finished. The point is not to consume texts, but to dwell in them.",
+              "questions": [
+                {
+                  "id": "en_read_p2_q1",
+                  "type": "single",
+                  "stem": "According to the passage, the deeper value of reading is that it ___.",
+                  "options": [
+                    "builds a large vocabulary quickly",
+                    "helps us understand others' minds",
+                    "improves writing speed",
+                    "replaces real-life social contact"
+                  ],
+                  "answer": 1,
+                  "explanation": "文中说阅读强化 “theory of mind”，即理解他人想法。",
+                  "difficulty": "难",
+                  "tags": [
+                    "推断"
+                  ]
+                },
+                {
+                  "id": "en_read_p2_q2",
+                  "type": "single",
+                  "stem": "What did the study find?",
+                  "options": [
+                    "Non-fiction readers had the best social perception",
+                    "Literary fiction readers scored higher on social perception tests",
+                    "Reading speed determines empathy",
+                    "Non-readers are the most empathetic"
+                  ],
+                  "answer": 1,
+                  "explanation": "研究发现读文学小说者在社会感知测试中表现更好。",
+                  "difficulty": "难",
+                  "tags": [
+                    "研究"
+                  ]
+                },
+                {
+                  "id": "en_read_p2_q3",
+                  "type": "single",
+                  "stem": "What is the author's attitude toward reading speed?",
+                  "options": [
+                    "Faster is always better",
+                    "Slow, attentive reading may matter more",
+                    "Speed is the only thing that counts",
+                    "Speed should be maximized"
+                  ],
+                  "answer": 1,
+                  "explanation": "作者说“slow, attentive reading may matter more”。",
+                  "difficulty": "难",
+                  "tags": [
+                    "态度"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            }
+          ]
+        },
+        {
+          "id": "en_vocab",
+          "name": "词汇",
+          "type": "practice",
+          "desc": "核心词汇辨析与拼写。",
+          "passages": [
+            {
+              "id": "en_vocab_p1",
+              "title": "词汇积累",
+              "grade": "初中",
+              "text": "",
+              "questions": [
+                {
+                  "id": "en_vocab_p1_q1",
+                  "type": "single",
+                  "stem": "The opposite of 'happy' is ____.",
+                  "options": [
+                    "sad",
+                    "big",
+                    "cold",
+                    "fast"
+                  ],
+                  "answer": 0,
+                  "explanation": "happy 的反义词是 sad。",
+                  "difficulty": "易",
+                  "tags": [
+                    "反义词"
+                  ]
+                },
+                {
+                  "id": "en_vocab_p1_q2",
+                  "type": "single",
+                  "stem": "A place where you borrow books is a ____.",
+                  "options": [
+                    "library",
+                    "kitchen",
+                    "garden",
+                    "station"
+                  ],
+                  "answer": 0,
+                  "explanation": "借书的地方是 library（图书馆）。",
+                  "difficulty": "易",
+                  "tags": [
+                    "名词"
+                  ]
+                },
+                {
+                  "id": "en_vocab_p1_q3",
+                  "type": "single",
+                  "stem": "Choose the correct spelling:",
+                  "options": [
+                    "receipt",
+                    "reciept",
+                    "receit",
+                    "reciet"
+                  ],
+                  "answer": 0,
+                  "explanation": "正确拼写为 receipt。",
+                  "difficulty": "中",
+                  "tags": [
+                    "拼写"
+                  ]
+                }
+              ],
+              "semester": "上学期"
+            }
+          ]
+        },
+        {
+          "id": "en_grammar",
+          "name": "语法",
+          "type": "practice",
+          "desc": "时态、主谓一致等基础语法。",
+          "passages": [
+            {
+              "id": "en_grammar_p1",
+              "title": "语法训练",
+              "grade": "初中",
+              "text": "",
+              "questions": [
+                {
+                  "id": "en_grammar_p1_q1",
+                  "type": "single",
+                  "stem": "She ___ to school every day.",
+                  "options": [
+                    "goes",
+                    "go",
+                    "going",
+                    "went"
+                  ],
+                  "answer": 0,
+                  "explanation": "主语第三人称单数，一般现在时用 goes。",
+                  "difficulty": "易",
+                  "tags": [
+                    "时态"
+                  ]
+                },
+                {
+                  "id": "en_grammar_p1_q2",
+                  "type": "single",
+                  "stem": "There ___ some milk in the glass.",
+                  "options": [
+                    "is",
+                    "are",
+                    "be",
+                    "am"
+                  ],
+                  "answer": 0,
+                  "explanation": "milk 不可数，用 is。",
+                  "difficulty": "易",
+                  "tags": [
+                    "主谓一致"
+                  ]
+                }
+              ],
+              "semester": "下学期"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "semesters": [
+    "上学期",
+    "下学期"
+  ]
+}

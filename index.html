@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智学题库 · 学习中心</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- 左侧固定栏 -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">▦</div>
+        <div>
+          <div class="brand-name">GRIDS</div>
+          <div class="brand-sub">智学题库 · 进度管理</div>
+        </div>
+      </div>
+      <nav class="side-nav">
+        <button class="side-item active" data-view="home"><span class="si-ico">📚</span><span>学习中心</span></button>
+        <button class="side-item" data-view="wrong"><span class="si-ico">📝</span><span>错题本</span></button>
+        <button class="side-item" data-view="io"><span class="si-ico">⚙️</span><span>导入导出</span></button>
+      </nav>
+      <div class="side-bottom">
+        <div class="child-switch">
+          <button class="child active">大宝</button>
+          <button class="child">二宝</button>
+        </div>
+        <div class="unlocked">● 已解锁</div>
+      </div>
+    </aside>
+
+    <!-- 主内容 -->
+    <main class="main">
+      <!-- 学习中心 -->
+      <section id="view-home" class="view active">
+        <div class="page-head">
+          <div class="page-head-row">
+            <div>
+              <div class="tag-lead">LEARN · 学习中心</div>
+              <h1 class="page-title-serif">学习中心</h1>
+            </div>
+            <div class="page-actions">
+              <button class="pill-btn" id="btn-go-io">⬇ 导入 / 导出 ›</button>
+            </div>
+          </div>
+          <p class="page-intro">按学期、年级与科目组织题目，依托练习与复习巩固知识。选择学期、年级与科目，进入词库开始学习；答错的题会自动归集到错题本。</p>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-group">
+            <span class="filter-label">学期</span>
+            <div class="pill-group" id="semester-pills"></div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">年级</span>
+            <div class="pill-group" id="grade-pills"></div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">科目</span>
+            <div class="pill-group" id="subject-chips"></div>
+          </div>
+        </div>
+
+        <div class="card overview-card">
+          <div class="ov-title">概览 · 学习数据</div>
+          <div class="ov-stats">
+            <div><div class="ov-num" id="stat-subjects">0</div><div class="ov-cap">科目</div></div>
+            <div><div class="ov-num" id="stat-boards">0</div><div class="ov-cap">板块</div></div>
+            <div><div class="ov-num" id="stat-questions">0</div><div class="ov-cap">题目</div></div>
+            <div><div class="ov-num" id="stat-wrong">0</div><div class="ov-cap">错题</div></div>
+          </div>
+        </div>
+
+        <div class="card library-card">
+          <div class="lib-head">
+            <div class="lib-title">分级 · 学习词库</div>
+            <button class="pill-btn" id="btn-subject-manage">科目管理 ›</button>
+          </div>
+          <div class="board-grid" id="board-grid"></div>
+        </div>
+      </section>
+
+      <!-- 板块详情 -->
+      <section id="view-board" class="view">
+        <button class="back-link" id="btn-board-back">← 学习中心</button>
+        <div class="card" id="board-detail"></div>
+      </section>
+
+      <!-- 练习 -->
+      <section id="view-practice" class="view">
+        <div class="practice-top">
+          <button class="back-link" id="btn-practice-exit">← 退出练习</button>
+          <div class="mode-toggle" id="mode-toggle">
+            <button class="mode-btn active" data-mode="passage">整卷模式</button>
+            <button class="mode-btn" data-mode="question">逐题模式</button>
+          </div>
+        </div>
+        <div class="quiz-crumb" id="practice-crumb"></div>
+        <div class="quiz-progress">
+          <span id="practice-progress-text">第 1 / 1 组</span>
+          <div class="bar"><div id="practice-bar" class="bar-fill"></div></div>
+        </div>
+        <div id="practice-box" class="card"></div>
+        <div class="quiz-actions">
+          <button id="btn-prev" class="btn ghost">上一组</button>
+          <button id="btn-next" class="btn primary">下一组</button>
+        </div>
+      </section>
+
+      <!-- 结果 -->
+      <section id="view-result" class="view">
+        <div id="result-summary" class="card result-summary"></div>
+        <div id="result-list"></div>
+div class="quiz-actions">
+          <button id="btn-result-review" class="btn primary">查看解析</button>
+          <button id="btn-result-home" class="btn ghost">返回学习中心</button>
+        </div>
+      </section>
+
+      <!-- 错题本 -->
+      <section id="view-wrong" class="view">
+        <div class="wrong-head">
+          <h1 class="page-title-serif sm">错题本</h1>
+          <button id="btn-clear-wrong" class="pill-btn danger">清空错题本</button>
+        </div>
+        <div id="wrong-list"></div>
+      </section>
+
+      <!-- 导入 / 导出（改为弹窗，见 openIoModal） -->
+    </main>
+  </div>
+
+  <!-- 通用弹窗 -->
+  <div class="modal-overlay" id="modal" style="display:none;">
+    <div class="modal" id="modal-box">
+      <div class="modal-head"><span id="modal-title">标题</span><button class="modal-close" id="modal-close">✕</button></div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
