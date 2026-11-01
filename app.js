@@ -23905,7 +23905,7 @@ function closeDrawer() { const sb = document.querySelector('.sidebar'); if (sb) 
 function isCorrect(q, sel) {
   // 答案尚未录入（null）时：暂不评分，归入「自查」，待后台补答案后自动生效
   if (q.answer === null || q.answer === undefined) return null;
-  if (q.type === 'essay' || q.type === 'task' || q.type === 'picture_choice') return null;
+  if (q.type === 'essay' || q.type === 'task') return null;
   if (q.type === 'judge') return sel === q.answer;
   if (q.type === 'multiple') {
     if (!Array.isArray(sel) || !Array.isArray(q.answer)) return false;
@@ -23923,6 +23923,7 @@ function formatAnswer(q, val) {
   if (val === undefined || val === null || (Array.isArray(val) && val.length === 0)) return '';
   if (q.type === 'multiple') return (Array.isArray(val) ? val : [val]).map(i => answerLabel(i) + '. ' + q.options[i]).join('； ');
   if (q.type === 'single' || q.type === 'judge') return answerLabel(val) + '. ' + ((q.options && q.options[val]) || '');
+  if (q.type === 'picture_choice') { const o = q.options && q.options[val]; return (o && o.label) ? o.label + '（图）' : String(val); }
   return String(val);
 }
 function diffTag(d) {
@@ -24347,7 +24348,7 @@ function submitPractice() {
       <div class="q-stem"><span class="q-no">${i + 1}.</span>${escapeHtml(it.q.stem)} <span class="q-meta">（${escapeHtml(it.it.title)}）</span></div>
       <div class="user-ans">你的答案：${ansText}</div>
       ${it.ok === false ? `<div class="user-ans">正确答案：${formatAnswer(it.q, it.q.answer)}</div>` : ''}
-      ${it.ok === null ? `<div class="user-ans">参考答案：${it.q.answer === null || it.q.answer === undefined ? '（答案待补充）' : escapeHtml(Array.isArray(it.q.answer) ? it.q.answer.join(' / ') : it.q.answer)}</div>` : ''}
+      ${it.ok === null ? `<div class="user-ans">参考答案：${escapeHtml((it.q.answer_ref) || (it.q.answer === null || it.q.answer === undefined ? '（答案待补充）' : (Array.isArray(it.q.answer) ? it.q.answer.join(' / ') : it.q.answer)))}</div>` : ''}
       <div class="explanation">解析：${escapeHtml(it.q.explanation || '（暂无解析）')}</div>`;
     list.appendChild(div);
   });
