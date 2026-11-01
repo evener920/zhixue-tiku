@@ -1719,8 +1719,43 @@ function startPractice(sid, bid) {
   quiz.items.forEach(it => it.questions.forEach(q => { quiz.answers[q.id] = q.type === 'multiple' ? [] : (q.type === 'fill' || q.type === 'essay' ? '' : null); }));
   showView('practice'); renderPracticeItem();
 }
+const AP_PLAY = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const AP_PAUSE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+function bindAudioPlayer() {
+  const wrap = $('#audio-player');
+  if (!wrap) return;
+  const audio = $('#ap-audio', wrap), btn = $('#ap-play', wrap), track = $('#ap-track', wrap),
+        fill = $('#ap-fill', wrap), knob = $('#ap-knob', wrap), cur = $('#ap-cur', wrap), dur = $('#ap-dur', wrap);
+  if (!audio || !btn || !track) return;
+  const fmt = s => { if (!isFinite(s) || s < 0) return '0:00'; s = Math.floor(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const refresh = () => {
+    cur.textContent = fmt(audio.currentTime);
+    dur.textContent = fmt(audio.duration);
+    const p = audio.duration ? Math.max(0, Math.min(1, audio.currentTime / audio.duration)) : 0;
+    fill.style.width = (p * 100) + '%';
+    if (knob) knob.style.left = (p * 100) + '%';
+  };
+  const setIcon = playing => { btn.innerHTML = playing ? AP_PAUSE : AP_PLAY; };
+  audio.addEventListener('loadedmetadata', refresh);
+  audio.addEventListener('timeupdate', refresh);
+  audio.addEventListener('ended', () => { setIcon(false); try { audio.currentTime = 0; } catch (e) {} refresh(); });
+  audio.addEventListener('play', () => setIcon(true));
+  audio.addEventListener('pause', () => setIcon(false));
+  btn.addEventListener('click', () => {
+    if (audio.paused) audio.play().then(() => setIcon(true)).catch(() => {});
+    else { audio.pause(); setIcon(false); }
+  });
+  track.addEventListener('click', e => {
+    const r = track.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const p = Math.max(0, Math.min(1, x));
+    if (audio.duration) audio.currentTime = p * audio.duration;
+  });
+  refresh();
+}
 function renderPracticeItem() {
   stopSpeech();
+  const oldA = $('#ap-audio'); if (oldA) { try { oldA.pause(); } catch (e) {} }
   const board = getBoard(quiz.subjectId, quiz.boardId);
   const subject = getSubject(quiz.subjectId);
   const it = quiz.items[quiz.index];
@@ -1736,7 +1771,14 @@ function renderPracticeItem() {
   if (it.mode === 'listen') {
     if (it.audio) {
       html += `<div class="listen-bar">
-          <audio class="listen-audio" controls preload="metadata" src="${encodeURI(it.audio)}"></audio>
+          <div class="audio-player" id="audio-player">
+            <button class="ap-play" id="ap-play" type="button" aria-label="播放/暂停">${AP_PLAY}</button>
+            <div class="ap-body">
+              <div class="ap-track" id="ap-track"><div class="ap-fill" id="ap-fill"></div><div class="ap-knob" id="ap-knob"></div></div>
+              <div class="ap-time"><span id="ap-cur">0:00</span> / <span id="ap-dur">0:00</span></div>
+            </div>
+            <audio id="ap-audio" preload="metadata" src="${encodeURI(it.audio)}"></audio>
+          </div>
         </div>`;
     } else {
       html += `<div class="listen-bar">
@@ -1764,6 +1806,9 @@ function renderPracticeItem() {
   }));
   $$('.fill-input', box).forEach(inp => inp.addEventListener('input', () => { quiz.answers[inp.dataset.qid] = inp.value; }));
   $$('.essay-input', box).forEach(inp => inp.addEventListener('input', () => { quiz.answers[inp.dataset.qid] = inp.value; }));
+  if (it.mode === 'listen' && it.audio) {
+    bindAudioPlayer();
+  }
   if (it.mode === 'listen' && !it.audio) {
     // 仅在无真实音频（TTS 兜底）时绑定播放/重播/原文按钮；有真实音频时这些按钮不存在，跳过以免 null.onclick 崩溃
     const play = () => speak(it.text, 'en-US');
