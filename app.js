@@ -1,6 +1,6 @@
 /* ===========================================================
    智学题库 v4 — 参考奶油色学习中心仪表盘重做
-   布局：左固定栏 + 右"学习中心"；词库双列卡片网格；年级/科目胶囊筛选。
+   布局：左固定栏 + 右"学习中心"；题库双列卡片网格；年级/科目胶囊筛选。
    数据：subjects[] → boards[] → passages[] → questions[]
    =========================================================== */
 
@@ -1122,7 +1122,7 @@ function renderDashboard() {
 }
 function emptyContinue() {
   return '<div class="dash-title">继续学习</div><div class="dash-meta">还没有练习记录，挑一个板块开始吧。</div>'
-    + '<div class="bd-actions" style="margin-top:12px;"><button class="btn primary sm" id="btn-go-lib">去词库</button></div>';
+    + '<div class="bd-actions" style="margin-top:12px;"><button class="btn primary sm" id="btn-go-lib">去题库</button></div>';
 }
 
 /* 板块详情 */
