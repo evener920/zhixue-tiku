@@ -1736,7 +1736,7 @@ function renderPracticeItem() {
   if (it.mode === 'listen') {
     if (it.audio) {
       html += `<div class="listen-bar">
-          <audio class="listen-audio" controls preload="none" src="${encodeURI(it.audio)}"></audio>
+          <audio class="listen-audio" controls preload="metadata" src="${encodeURI(it.audio)}"></audio>
         </div>`;
     } else {
       html += `<div class="listen-bar">
@@ -1764,10 +1764,13 @@ function renderPracticeItem() {
   }));
   $$('.fill-input', box).forEach(inp => inp.addEventListener('input', () => { quiz.answers[inp.dataset.qid] = inp.value; }));
   $$('.essay-input', box).forEach(inp => inp.addEventListener('input', () => { quiz.answers[inp.dataset.qid] = inp.value; }));
-  if (it.mode === 'listen') {
+  if (it.mode === 'listen' && !it.audio) {
+    // 仅在无真实音频（TTS 兜底）时绑定播放/重播/原文按钮；有真实音频时这些按钮不存在，跳过以免 null.onclick 崩溃
     const play = () => speak(it.text, 'en-US');
-    $('#btn-play').onclick = play; $('#btn-replay').onclick = play;
-    $('#transcript-chk').onchange = e => { $('#transcript').style.display = e.target.checked ? 'block' : 'none'; };
+    const bp = $('#btn-play'), br = $('#btn-replay'), tc = $('#transcript-chk');
+    if (bp) bp.onclick = play;
+    if (br) br.onclick = play;
+    if (tc) tc.onchange = e => { const tr = $('#transcript'); if (tr) tr.style.display = e.target.checked ? 'block' : 'none'; };
   }
 }
 function renderQuestionInput(q, qi) {
