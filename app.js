@@ -1199,7 +1199,7 @@ function startPractice(sid, bid) {
   quiz.subjectId = sid; quiz.boardId = bid; quiz.index = 0; quiz.answers = {};
   const makeItem = p => ({
     title: p.title, text: p.text || '', audio: p.audio || '', topic: p.topic || '',
-    imageOnly: !!p.imageOnly, mode: board.type === 'listening' ? 'listen' : 'read', questions: p.questions
+    images: p.images || [], imageOnly: !!p.imageOnly, mode: board.type === 'listening' ? 'listen' : 'read', questions: p.questions
   });
   if (quiz.mode === 'question') {
     quiz.items = [];
@@ -1289,8 +1289,13 @@ function renderPracticeItem() {
   } else if (it.text) {
     html += `<div class="passage-text">${escapeHtml(it.text)}</div>`;
   }
+  if (it.images && it.images.length) {
+    html += `<div class="passage-imgs">${imgGrid(it.images, 'passage-img-grid')}</div>`;
+  }
   if (it.imageOnly || !it.questions || it.questions.length === 0) {
-    html += `<div class="task-note">${icon('info')} 本篇为图片听力题，请听上方音频作答，无文本题目。完成后点「下一组」继续。</div>`;
+    if (!(it.images && it.images.length)) {
+      html += `<div class="task-note">${icon('info')} 本篇为图片听力题，请听上方音频作答，无文本题目。完成后点「下一组」继续。</div>`;
+    }
   }
   it.questions.forEach((q, qi) => { html += renderQuestionInput(q, qi); });
   box.innerHTML = html;
@@ -1316,6 +1321,12 @@ function renderPracticeItem() {
     if (tc) tc.onchange = e => { const tr = $('#transcript'); if (tr) tr.style.display = e.target.checked ? 'block' : 'none'; };
   }
 }
+function imgGrid(list, cls) {
+  if (!list || !list.length) return '';
+  return `<div class="img-grid ${cls || ''}">` + list.map(src =>
+    `<div class="img-cell"><img loading="lazy" src="${escapeHtml(src)}" alt="题目图片" onerror="this.parentNode.classList.add('img-broken')"></div>`
+  ).join('') + '</div>';
+}
 function renderQuestionInput(q, qi) {
   let body = '';
   if (q.type === 'judge') {
@@ -1329,17 +1340,39 @@ function renderQuestionInput(q, qi) {
       const sel = q.type === 'multiple' ? (quiz.answers[q.id] || []).includes(oi) : quiz.answers[q.id] === oi;
       return `<label class="opt ${sel ? 'selected' : ''}"><input type="${t}" name="${q.id}" value="${oi}" ${sel ? 'checked' : ''}><span>${answerLabel(oi)}. ${escapeHtml(opt)}</span></label>`;
     }).join('');
+  } else if (q.type === 'picture_choice') {
+    if (q.options && q.options.length && typeof q.options[0] === 'object' && q.options[0].image) {
+      body = `<div class="img-options">` + q.options.map((opt, oi) => {
+        const sel = quiz.answers[q.id] === oi;
+        return `<label class="opt img-opt ${sel ? 'selected' : ''}">
+            <input type="radio" name="${q.id}" value="${oi}" ${sel ? 'checked' : ''}>
+            <img loading="lazy" src="${escapeHtml(opt.image)}" alt="${escapeHtml(opt.label || answerLabel(oi))}" onerror="this.parentNode.classList.add('img-broken')">
+            <span class="img-label">${escapeHtml(opt.label || answerLabel(oi))}</span>
+          </label>`;
+      }).join('') + `</div>`;
+    } else {
+      body = `<div class="task-note">${icon('info')} 图片选择题：请听音频，从上方图片中选出正确的一项（答案稍后补充，不计分）。</div>`;
+    }
+  } else if (q.type === 'task') {
+    if (q.images && q.images.length) {
+      body = imgGrid(q.images, 'q-imgs') + `<div class="task-note">${icon('info')} 听音任务题：请听音频作答，本题答案稍后补充（不计分）。</div>`;
+    } else {
+      body = `<div class="task-note">${icon('info')} 听音任务题：请听音频作答，本题答案稍后补充（不计分）。</div>`;
+    }
   } else if (q.type === 'fill') {
     body = `<input class="fill-input" data-qid="${q.id}" value="${escapeHtml(quiz.answers[q.id] || '')}" placeholder="请输入答案">`;
-  } else if (q.type === 'task' || q.type === 'picture_choice') {
-    body = `<div class="task-note">${icon('info')} 听音任务 / 图片题：请听音频作答，本题答案稍后补充（不计分）。</div>`;
   } else {
     body = `<textarea class="essay-input" data-qid="${q.id}" placeholder="写下你的解答…">${escapeHtml(quiz.answers[q.id] || '')}</textarea>`;
+  }
+  // 判断题 / 任意带图题目：在选项之上展示图片
+  let imgHtml = '';
+  if (q.images && q.images.length && q.type !== 'task') {
+    imgHtml = imgGrid(q.images, 'q-imgs');
   }
   const stemHtml = q.stem ? escapeHtml(q.stem)
     : (q.instr ? `<span class="q-instr">${escapeHtml(q.instr)}</span>` : '<span class="q-instr">（听音频作答）</span>');
   return `<div class="question" data-qid="${q.id}">
-    <div class="q-stem"><span class="q-no">${qi + 1}.</span>${stemHtml}${diffTag(q.difficulty)}</div>${body}</div>`;
+    <div class="q-stem"><span class="q-no">${qi + 1}.</span>${stemHtml}${diffTag(q.difficulty)}</div>${imgHtml}${body}</div>`;
 }
 function nextItem() { if (quiz.index < quiz.items.length - 1) { quiz.index++; renderPracticeItem(); } else submitPractice(); }
 function submitPractice() {

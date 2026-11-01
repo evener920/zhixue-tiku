@@ -289,4 +289,28 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
 .passage-topic { font-size: 13px; color: #8a8175; margin: 2px 0 12px; }
 .q-instr { color: #6b6256; font-style: italic; font-weight: 500; }
 .task-note { background: #FFF7E6; border: 1px solid #F0D9A8; color: #8a6d3b; border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.6; margin: 4px 0 14px; display: flex; gap: 8px; align-items: flex-start; }
+
+/* ---- 图片题：图片选项 / 图片画廊（参考学堂站的圆角卡片童趣布局） ---- */
+.img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 10px; margin: 6px 0 12px; }
+.img-cell { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 64px; }
+.img-cell img { max-width: 100%; max-height: 150px; display: block; object-fit: contain; }
+.img-cell.img-broken { color: var(--muted); font-size: 12px; }
+.img-cell.img-broken::after { content: "图片缺失"; }
+.img-cell.img-broken img { display: none; }
+
+.passage-imgs { margin: 6px 0 14px; }
+.passage-img-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+.passage-img-grid .img-cell img { max-height: 130px; }
+
+/* 图片选择题：可点选的图片选项卡片 */
+.img-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; margin: 8px 0 14px; }
+.opt.img-opt { display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--card); border: 2px solid var(--line); border-radius: 14px; padding: 10px 8px 8px; cursor: pointer; transition: border-color .15s, background .15s, transform .1s; position: relative; }
+.opt.img-opt:hover { border-color: var(--line-strong); }
+.opt.img-opt.selected { border-color: var(--accent); background: var(--accent-soft); }
+.opt.img-opt img { max-width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; display: block; }
+.opt.img-opt .img-label { font-family: var(--serif); font-weight: 700; font-size: 15px; color: var(--ink); background: var(--tag-bg); border-radius: 999px; min-width: 26px; text-align: center; padding: 2px 10px; }
+.opt.img-opt.selected .img-label { background: var(--accent); color: #fff; }
+.opt.img-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.q-imgs { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+.q-imgs .img-cell img { max-height: 140px; }
 .task-note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
