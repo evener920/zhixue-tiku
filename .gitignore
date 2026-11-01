@@ -4,3 +4,4 @@ server.js
 server.log
 *.log
 .DS_Store
+.wrangler/
