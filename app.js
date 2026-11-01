@@ -1829,7 +1829,7 @@ async function init() {
       try {
         const ctrl = new AbortController();
         const to = setTimeout(() => ctrl.abort(), 6000);
-        res = await fetch('data/questions.json?v=20261101b', { signal: ctrl.signal });
+        res = await fetch('data/questions.json?v=20261101c', { signal: ctrl.signal });
         clearTimeout(to);
       } catch (e) { res = null; }
       if (res && res.ok) { try { const j = await res.json(); if (j && j.subjects && j.subjects.length) BANK = j; } catch (e) {} }

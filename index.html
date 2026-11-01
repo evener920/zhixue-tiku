@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>智学题库 · 学习中心</title>
-  <link rel="stylesheet" href="styles.css?v=20261101b" />
+  <link rel="stylesheet" href="styles.css?v=20261101c" />
 </head>
 <body>
   <div class="topbar" id="topbar">
@@ -137,7 +137,49 @@ div class="quiz-actions">
           <h1 class="page-title-serif sm">错题本</h1>
           <button id="btn-clear-wrong" class="pill-btn danger">清空错题本</button>
         </div>
-        <div id="wrong-list"></div>
+        <!-- 静态兜底：即使 JS 未加载/旧缓存，主区也必有可见内容，绝不空白 -->
+        <div id="wrong-list">
+          <div class="wrong-banner">示例展示 · 错题本按「科目 → 板块」分组。练习中答错的题目会自动归集到这里，并替换此示例。</div>
+          <div class="wrong-summary">
+            <span class="ws-pill">共 <b>3</b> 道错题</span>
+            <span class="ws-pill">覆盖 <b>3</b> 个科目</span>
+            <span class="ws-pill">涉及 <b>3</b> 个板块</span>
+          </div>
+          <div class="wrong-group">
+            <div class="wg-head"><span class="wg-name">语文</span><span class="wg-count">1 道</span></div>
+            <div class="wg-sub">阅读 <span class="wg-count">1 道</span></div>
+            <div class="card result-item">
+              <span class="tag no">答错</span>
+              <div class="q-stem"><span class="q-no">1.</span>小松鼠过冬的原因是？</div>
+              <div class="user-ans">正确答案：A. 冬天太长，需要储备食物</div>
+              <div class="explanation">解析：文中写小松鼠担心冬天食物不足，因此提早准备过冬粮食。</div>
+              <div class="bd-actions" style="margin-top:10px;"><button class="btn ghost sm">重练此题</button></div>
+            </div>
+          </div>
+          <div class="wrong-group">
+            <div class="wg-head"><span class="wg-name">数学</span><span class="wg-count">1 道</span></div>
+            <div class="wg-sub">易错专项 <span class="wg-count">1 道</span></div>
+            <div class="card result-item">
+              <span class="tag no">答错</span>
+              <div class="q-stem"><span class="q-no">1.</span>某商品原价 200 元，打七五折后的售价是 ____ 元。</div>
+              <div class="user-ans">正确答案：150</div>
+              <div class="explanation">解析：200 × 0.75 = 150（元）。</div>
+              <div class="bd-actions" style="margin-top:10px;"><button class="btn ghost sm">重练此题</button></div>
+            </div>
+          </div>
+          <div class="wrong-group">
+            <div class="wg-head"><span class="wg-name">英语</span><span class="wg-count">1 道</span></div>
+            <div class="wg-sub">语法 <span class="wg-count">1 道</span></div>
+            <div class="card result-item">
+              <span class="tag no">答错</span>
+              <div class="q-stem"><span class="q-no">1.</span>— Where is Tom? — He ___ to the library.</div>
+              <div class="user-ans">正确答案：has gone</div>
+              <div class="explanation">解析："去了图书馆"强调过去动作对现在的影响，用现在完成时。</div>
+              <div class="bd-actions" style="margin-top:10px;"><button class="btn ghost sm">重练此题</button></div>
+            </div>
+          </div>
+          <div style="margin-top:14px;color:#8a6d2f;font-size:13px;line-height:1.6;">↑ 以上为示例。完成任意练习并答错后，真实错题将自动替换示例显示在此处。</div>
+        </div>
       </section>
 
       <!-- 导入 / 导出（改为弹窗，见 openIoModal） -->
@@ -158,6 +200,6 @@ div class="quiz-actions">
     </div>
   </div>
 
-  <script src="app.js?v=20261101b"></script>
+  <script src="app.js?v=20261101c"></script>
 </body>
 </html>
