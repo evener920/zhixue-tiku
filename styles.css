@@ -274,3 +274,10 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
   .page-title-serif { font-size: 30px; }
   .page-head-row { flex-direction: column; }
 }
+
+/* ---- 听力音频播放器 + 判断题 + 任务题提示 ---- */
+.listen-audio { width: 100%; max-width: 560px; height: 44px; margin-bottom: 14px; border-radius: 10px; }
+.passage-topic { font-size: 13px; color: #8a8175; margin: 2px 0 12px; }
+.q-instr { color: #6b6256; font-style: italic; font-weight: 500; }
+.task-note { background: #FFF7E6; border: 1px solid #F0D9A8; color: #8a6d3b; border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.6; margin: 4px 0 14px; display: flex; gap: 8px; align-items: flex-start; }
+.task-note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }

@@ -936,7 +936,7 @@ function answerLabel(i) { return String.fromCharCode(65 + i); }
 function getSubject(id) { return BANK.subjects.find(s => s.id === id); }
 function getBoard(sid, bid) { const s = getSubject(sid); return s && s.boards.find(b => b.id === bid); }
 function norm(s) { return String(s == null ? '' : s).trim().toLowerCase().replace(/\s+/g, ''); }
-function typeName(t) { return { single: '单选', multiple: '多选', fill: '填空', essay: '解答', reading: '阅读', listening: '听力', practice: '练习' }[t] || t; }
+function typeName(t) { return { single: '单选', multiple: '多选', fill: '填空', essay: '解答', judge: '判断', task: '任务', picture_choice: '图片', reading: '阅读', listening: '听力', practice: '练习' }[t] || t; }
 
 /* ----------------------- 图标体系 ----------------------- */
 const ICONS = {
@@ -962,7 +962,10 @@ function mountIcons() { document.querySelectorAll('[data-icon]').forEach(el => {
 function closeDrawer() { const sb = document.querySelector('.sidebar'); if (sb) sb.classList.remove('open'); const sc = document.getElementById('scrim'); if (sc) sc.classList.remove('show'); }
 
 function isCorrect(q, sel) {
-  if (q.type === 'essay') return null;
+  // 答案尚未录入（null）时：暂不评分，归入「自查」，待后台补答案后自动生效
+  if (q.answer === null || q.answer === undefined) return null;
+  if (q.type === 'essay' || q.type === 'task' || q.type === 'picture_choice') return null;
+  if (q.type === 'judge') return sel === q.answer;
   if (q.type === 'multiple') {
     if (!Array.isArray(sel) || !Array.isArray(q.answer)) return false;
     if (sel.length !== q.answer.length) return false;
@@ -978,7 +981,7 @@ function isCorrect(q, sel) {
 function formatAnswer(q, val) {
   if (val === undefined || val === null || (Array.isArray(val) && val.length === 0)) return '';
   if (q.type === 'multiple') return (Array.isArray(val) ? val : [val]).map(i => answerLabel(i) + '. ' + q.options[i]).join('； ');
-  if (q.type === 'single') return answerLabel(val) + '. ' + q.options[val];
+  if (q.type === 'single' || q.type === 'judge') return answerLabel(val) + '. ' + ((q.options && q.options[val]) || '');
   return String(val);
 }
 function diffTag(d) {
@@ -1194,11 +1197,15 @@ function startPractice(sid, bid) {
   const fps = filteredPassages(board);
   if (!fps.length) { alert('当前年级下该板块暂无题目，换个年级试试。'); return; }
   quiz.subjectId = sid; quiz.boardId = bid; quiz.index = 0; quiz.answers = {};
+  const makeItem = p => ({
+    title: p.title, text: p.text || '', audio: p.audio || '', topic: p.topic || '',
+    imageOnly: !!p.imageOnly, mode: board.type === 'listening' ? 'listen' : 'read', questions: p.questions
+  });
   if (quiz.mode === 'question') {
     quiz.items = [];
-    fps.forEach(p => p.questions.forEach(q => quiz.items.push({ title: p.title, text: p.text, mode: board.type === 'listening' ? 'listen' : 'read', questions: [q] })));
+    fps.forEach(p => p.questions.forEach(q => quiz.items.push(Object.assign(makeItem(p), { questions: [q] }))));
   } else {
-    quiz.items = fps.map(p => ({ title: p.title, text: p.text, mode: board.type === 'listening' ? 'listen' : 'read', questions: p.questions }));
+    quiz.items = fps.map(makeItem);
   }
   quiz.items.forEach(it => it.questions.forEach(q => { quiz.answers[q.id] = q.type === 'multiple' ? [] : (q.type === 'fill' || q.type === 'essay' ? '' : null); }));
   showView('practice'); renderPracticeItem();
@@ -1216,15 +1223,25 @@ function renderPracticeItem() {
   $('#btn-next').textContent = quiz.index === total - 1 ? '提交答卷' : '下一组';
   const box = $('#practice-box');
   let html = `<div class="passage-title">${escapeHtml(it.title)}</div>`;
+  if (it.topic) html += `<div class="passage-topic">话题：${escapeHtml(it.topic)}</div>`;
   if (it.mode === 'listen') {
-    html += `<div class="listen-bar">
-        <button class="btn primary sm" id="btn-play">${icon('play')} 播放听力</button>
-        <button class="btn ghost sm" id="btn-replay">${icon('replay')} 重播</button>
-        <label class="transcript-toggle"><input type="checkbox" id="transcript-chk"> 显示原文</label>
-      </div>
-      <div class="passage-text" id="transcript" style="display:none;">${escapeHtml(it.text)}</div>`;
+    if (it.audio) {
+      html += `<div class="listen-bar">
+          <audio class="listen-audio" controls preload="none" src="${encodeURI(it.audio)}"></audio>
+        </div>`;
+    } else {
+      html += `<div class="listen-bar">
+          <button class="btn primary sm" id="btn-play">${icon('play')} 播放听力</button>
+          <button class="btn ghost sm" id="btn-replay">${icon('replay')} 重播</button>
+          <label class="transcript-toggle"><input type="checkbox" id="transcript-chk"> 显示原文</label>
+        </div>
+        <div class="passage-text" id="transcript" style="display:none;">${escapeHtml(it.text)}</div>`;
+    }
   } else if (it.text) {
     html += `<div class="passage-text">${escapeHtml(it.text)}</div>`;
+  }
+  if (it.imageOnly || !it.questions || it.questions.length === 0) {
+    html += `<div class="task-note">${icon('info')} 本篇为图片听力题，请听上方音频作答，无文本题目。完成后点「下一组」继续。</div>`;
   }
   it.questions.forEach((q, qi) => { html += renderQuestionInput(q, qi); });
   box.innerHTML = html;
@@ -1246,7 +1263,12 @@ function renderPracticeItem() {
 }
 function renderQuestionInput(q, qi) {
   let body = '';
-  if (q.type === 'single' || q.type === 'multiple') {
+  if (q.type === 'judge') {
+    body = q.options.map((opt, oi) => {
+      const sel = quiz.answers[q.id] === oi;
+      return `<label class="opt ${sel ? 'selected' : ''}"><input type="radio" name="${q.id}" value="${oi}" ${sel ? 'checked' : ''}><span>${answerLabel(oi)}. ${escapeHtml(opt)}</span></label>`;
+    }).join('');
+  } else if (q.type === 'single' || q.type === 'multiple') {
     const t = q.type === 'multiple' ? 'checkbox' : 'radio';
     body = q.options.map((opt, oi) => {
       const sel = q.type === 'multiple' ? (quiz.answers[q.id] || []).includes(oi) : quiz.answers[q.id] === oi;
@@ -1254,11 +1276,15 @@ function renderQuestionInput(q, qi) {
     }).join('');
   } else if (q.type === 'fill') {
     body = `<input class="fill-input" data-qid="${q.id}" value="${escapeHtml(quiz.answers[q.id] || '')}" placeholder="请输入答案">`;
+  } else if (q.type === 'task' || q.type === 'picture_choice') {
+    body = `<div class="task-note">${icon('info')} 听音任务 / 图片题：请听音频作答，本题答案稍后补充（不计分）。</div>`;
   } else {
     body = `<textarea class="essay-input" data-qid="${q.id}" placeholder="写下你的解答…">${escapeHtml(quiz.answers[q.id] || '')}</textarea>`;
   }
+  const stemHtml = q.stem ? escapeHtml(q.stem)
+    : (q.instr ? `<span class="q-instr">${escapeHtml(q.instr)}</span>` : '<span class="q-instr">（听音频作答）</span>');
   return `<div class="question" data-qid="${q.id}">
-    <div class="q-stem"><span class="q-no">${qi + 1}.</span>${escapeHtml(q.stem)}${diffTag(q.difficulty)}</div>${body}</div>`;
+    <div class="q-stem"><span class="q-no">${qi + 1}.</span>${stemHtml}${diffTag(q.difficulty)}</div>${body}</div>`;
 }
 function nextItem() { if (quiz.index < quiz.items.length - 1) { quiz.index++; renderPracticeItem(); } else submitPractice(); }
 function submitPractice() {
@@ -1292,7 +1318,7 @@ function submitPractice() {
       <div class="q-stem"><span class="q-no">${i + 1}.</span>${escapeHtml(it.q.stem)} <span class="q-meta">（${escapeHtml(it.it.title)}）</span></div>
       <div class="user-ans">你的答案：${ansText}</div>
       ${it.ok === false ? `<div class="user-ans">正确答案：${formatAnswer(it.q, it.q.answer)}</div>` : ''}
-      ${it.ok === null ? `<div class="user-ans">参考答案：${escapeHtml(Array.isArray(it.q.answer) ? it.q.answer.join(' / ') : it.q.answer)}</div>` : ''}
+      ${it.ok === null ? `<div class="user-ans">参考答案：${it.q.answer === null || it.q.answer === undefined ? '（答案待补充）' : escapeHtml(Array.isArray(it.q.answer) ? it.q.answer.join(' / ') : it.q.answer)}</div>` : ''}
       <div class="explanation">解析：${escapeHtml(it.q.explanation || '（暂无解析）')}</div>`;
     list.appendChild(div);
   });
