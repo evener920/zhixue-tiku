@@ -7,20 +7,24 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="topbar" id="topbar">
+    <button class="hamburger" id="hamburger" data-icon="menu" aria-label="菜单"></button>
+    <div class="topbar-brand">智学题库</div>
+  </div>
   <div class="app">
     <!-- 左侧固定栏 -->
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-logo">▦</div>
+        <div class="brand-logo" data-icon="grid"></div>
         <div>
           <div class="brand-name">GRIDS</div>
           <div class="brand-sub">智学题库 · 进度管理</div>
         </div>
       </div>
       <nav class="side-nav">
-        <button class="side-item active" data-view="home"><span class="si-ico">📚</span><span>学习中心</span></button>
-        <button class="side-item" data-view="wrong"><span class="si-ico">📝</span><span>错题本</span></button>
-        <button class="side-item" data-view="io"><span class="si-ico">⚙️</span><span>导入导出</span></button>
+        <button class="side-item active" data-view="home"><span class="si-ico" data-icon="book"></span><span>学习中心</span></button>
+        <button class="side-item" data-view="wrong"><span class="si-ico" data-icon="wrong"></span><span>错题本</span></button>
+        <button class="side-item" data-view="io"><span class="si-ico" data-icon="gear"></span><span>导入导出</span></button>
       </nav>
       <div class="side-bottom">
         <div class="child-switch">
@@ -42,7 +46,7 @@
               <h1 class="page-title-serif">学习中心</h1>
             </div>
             <div class="page-actions">
-              <button class="pill-btn" id="btn-go-io">⬇ 导入 / 导出 ›</button>
+              <button class="pill-btn" id="btn-go-io"><span data-icon="download"></span> 导入 / 导出 ›</button>
             </div>
           </div>
           <p class="page-intro">按学期、年级与科目组织题目，依托练习与复习巩固知识。选择学期、年级与科目，进入词库开始学习；答错的题会自动归集到错题本。</p>
@@ -63,13 +67,21 @@
           </div>
         </div>
 
-        <div class="card overview-card">
+        <div class="overview-card">
           <div class="ov-title">概览 · 学习数据</div>
           <div class="ov-stats">
             <div><div class="ov-num" id="stat-subjects">0</div><div class="ov-cap">科目</div></div>
             <div><div class="ov-num" id="stat-boards">0</div><div class="ov-cap">板块</div></div>
             <div><div class="ov-num" id="stat-questions">0</div><div class="ov-cap">题目</div></div>
             <div><div class="ov-num" id="stat-wrong">0</div><div class="ov-cap">错题</div></div>
+          </div>
+        </div>
+
+        <div class="dash-row">
+          <div class="card continue-card" id="continue-card"></div>
+          <div class="dash-col">
+            <div class="card review-card" id="review-card"></div>
+            <div class="card weak-card" id="weak-card"></div>
           </div>
         </div>
 
@@ -84,14 +96,14 @@
 
       <!-- 板块详情 -->
       <section id="view-board" class="view">
-        <button class="back-link" id="btn-board-back">← 学习中心</button>
+        <button class="back-link" id="btn-board-back"><span data-icon="back"></span> 学习中心</button>
         <div class="card" id="board-detail"></div>
       </section>
 
       <!-- 练习 -->
       <section id="view-practice" class="view">
         <div class="practice-top">
-          <button class="back-link" id="btn-practice-exit">← 退出练习</button>
+          <button class="back-link" id="btn-practice-exit"><span data-icon="back"></span> 退出练习</button>
           <div class="mode-toggle" id="mode-toggle">
             <button class="mode-btn active" data-mode="passage">整卷模式</button>
             <button class="mode-btn" data-mode="question">逐题模式</button>
@@ -130,12 +142,18 @@ div class="quiz-actions">
 
       <!-- 导入 / 导出（改为弹窗，见 openIoModal） -->
     </main>
+    <nav class="bottom-nav" id="bottom-nav">
+      <button data-view="home"><span class="bn-ico" data-icon="book"></span><span>学习</span></button>
+      <button data-view="wrong"><span class="bn-ico" data-icon="wrong"></span><span>错题</span></button>
+      <button data-action="io"><span class="bn-ico" data-icon="gear"></span><span>管理</span></button>
+    </nav>
+    <div class="scrim" id="scrim"></div>
   </div>
 
   <!-- 通用弹窗 -->
   <div class="modal-overlay" id="modal" style="display:none;">
     <div class="modal" id="modal-box">
-      <div class="modal-head"><span id="modal-title">标题</span><button class="modal-close" id="modal-close">✕</button></div>
+      <div class="modal-head"><span id="modal-title">标题</span><button class="modal-close" id="modal-close" data-icon="close" aria-label="关闭"></button></div>
       <div class="modal-body" id="modal-body"></div>
     </div>
   </div>

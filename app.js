@@ -928,6 +928,28 @@ function getBoard(sid, bid) { const s = getSubject(sid); return s && s.boards.fi
 function norm(s) { return String(s == null ? '' : s).trim().toLowerCase().replace(/\s+/g, ''); }
 function typeName(t) { return { single: '单选', multiple: '多选', fill: '填空', essay: '解答', reading: '阅读', listening: '听力', practice: '练习' }[t] || t; }
 
+/* ----------------------- 图标体系 ----------------------- */
+const ICONS = {
+  grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5C10 4.3 7 3.9 4.5 4.2v14.3c2.5.3 5.5-.1 7.5-1.3 2 1.2 5 1.6 7.5 1.3V4.2C17 3.9 14 4.3 12 5.5z"/><path d="M12 5.5v13.8"/></svg>',
+  wrong: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1.1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1.1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5.5v13l11-6.5z"/></svg>',
+  replay: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4.5h4.5"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17v3z"/><path d="M14.5 6.5l3 3"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M6.5 7l1 13a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2l1-13"/></svg>',
+  close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>',
+  dot: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="4"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg>',
+  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 19h14"/></svg>'
+};
+function icon(name) { return ICONS[name] || ''; }
+function mountIcons() { document.querySelectorAll('[data-icon]').forEach(el => { const n = el.getAttribute('data-icon'); if (ICONS[n]) el.innerHTML = ICONS[n]; }); }
+function closeDrawer() { const sb = document.querySelector('.sidebar'); if (sb) sb.classList.remove('open'); const sc = document.getElementById('scrim'); if (sc) sc.classList.remove('show'); }
+
 function isCorrect(q, sel) {
   if (q.type === 'essay') return null;
   if (q.type === 'multiple') {
@@ -1049,6 +1071,58 @@ function renderHome() {
     });
   });
   if (!any) grid.innerHTML = '<div class="empty">当前筛选下暂无板块，换一个年级或科目试试。</div>';
+  renderDashboard();
+}
+
+/* 仪表盘：继续学习 / 待巩固 / 薄弱点 */
+function boardMeta(bid) {
+  for (const s of (BANK.subjects || [])) for (const b of (s.boards || [])) if (b.id === bid) return { s, b };
+  return null;
+}
+function renderDashboard() {
+  const prog = getProgress();
+  let best = null;
+  for (const id in prog) { const p = prog[id]; if (p && p.ts && (!best || p.ts > best.p.ts)) best = { id, p }; }
+  const cc = document.getElementById('continue-card');
+  if (best) {
+    const m = boardMeta(best.id);
+    if (m) {
+      const mastery = best.p.done ? Math.round(best.p.correct / best.p.done * 100) : 0;
+      cc.innerHTML = '<div class="dash-title">继续学习</div>'
+        + '<div class="dash-name">' + escapeHtml(m.s.name) + ' · ' + escapeHtml(m.b.name) + '</div>'
+        + '<div class="dash-meta">已练习 ' + best.p.done + ' 题 · 掌握 ' + mastery + '%</div>'
+        + '<div class="lc-bar"><div class="lc-bar-fill" style="width:' + mastery + '%"></div></div>'
+        + '<div class="bd-actions" style="margin-top:14px;"><button class="btn primary sm" id="btn-continue">继续练习</button></div>';
+      const bc = document.getElementById('btn-continue'); if (bc) bc.onclick = () => startPractice(m.s.id, m.b.id);
+    } else { cc.innerHTML = emptyContinue(); }
+  } else { cc.innerHTML = emptyContinue(); }
+  const gl = document.getElementById('btn-go-lib'); if (gl) gl.onclick = () => showView('home');
+
+  const wrong = getWrong();
+  const rc = document.getElementById('review-card');
+  if (wrong.length) {
+    const r = wrong[0];
+    rc.innerHTML = '<div class="dash-title">待巩固 · 间隔复习</div>'
+      + '<div class="score-num" style="font-size:30px;">' + wrong.length + '</div>'
+      + '<div class="dash-meta" style="margin-bottom:6px;">道错题待复习</div>'
+      + '<div class="dash-meta">' + escapeHtml(r.subjectName) + ' · ' + escapeHtml(r.boardName) + '</div>'
+      + '<div class="bd-actions" style="margin-top:12px;"><button class="btn ghost sm" id="btn-go-wrong">去错题本</button></div>';
+    const gw = document.getElementById('btn-go-wrong'); if (gw) gw.onclick = () => { showView('wrong'); renderWrong(); };
+  } else {
+    rc.innerHTML = '<div class="dash-title">待巩固 · 间隔复习</div><div class="dash-meta">还没有错题，保持住！</div>';
+  }
+
+  const tagCount = {};
+  wrong.forEach(r => (r.q.tags || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; }));
+  const top = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const wc = document.getElementById('weak-card');
+  wc.innerHTML = '<div class="dash-title">薄弱点诊断</div>'
+    + (top.length ? '<div class="chip-wrap">' + top.map(([t, c]) => '<span class="weak-chip">' + escapeHtml(t) + ' <b>' + c + '</b></span>').join('') + '</div>'
+      : '<div class="dash-meta">练习后自动统计易错知识点。</div>');
+}
+function emptyContinue() {
+  return '<div class="dash-title">继续学习</div><div class="dash-meta">还没有练习记录，挑一个板块开始吧。</div>'
+    + '<div class="bd-actions" style="margin-top:12px;"><button class="btn primary sm" id="btn-go-lib">去词库</button></div>';
 }
 
 /* 板块详情 */
@@ -1109,8 +1183,8 @@ function renderPracticeItem() {
   let html = `<div class="passage-title">${escapeHtml(it.title)}</div>`;
   if (it.mode === 'listen') {
     html += `<div class="listen-bar">
-        <button class="btn primary sm" id="btn-play">▶ 播放听力</button>
-        <button class="btn ghost sm" id="btn-replay">↻ 重播</button>
+        <button class="btn primary sm" id="btn-play">${icon('play')} 播放听力</button>
+        <button class="btn ghost sm" id="btn-replay">${icon('replay')} 重播</button>
         <label class="transcript-toggle"><input type="checkbox" id="transcript-chk"> 显示原文</label>
       </div>
       <div class="passage-text" id="transcript" style="display:none;">${escapeHtml(it.text)}</div>`;
@@ -1166,7 +1240,7 @@ function submitPractice() {
   }));
   const prog = getProgress();
   const prev = prog[board.id] || { done: 0, correct: 0 };
-  prog[board.id] = { done: prev.done + done, correct: prev.correct + correct };
+  prog[board.id] = { done: prev.done + done, correct: prev.correct + correct, ts: Date.now() };
   localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog));
 
   const pct = done ? Math.round(correct / done * 100) : 0;
@@ -1238,12 +1312,12 @@ function openModal(title, bodyHtml, onMount) {
 function closeModal() { $('#modal').style.display = 'none'; }
 
 function openSubjectManage() {
-  let html = `<button class="btn primary sm" id="sm-add" style="margin-bottom:14px;">＋ 新增科目</button>`;
+  let html = `<button class="btn primary sm" id="sm-add" style="margin-bottom:14px;">${icon('plus')} 新增科目</button>`;
   if (!BANK.subjects.length) html += '<div class="empty">暂无科目。</div>';
   BANK.subjects.forEach(s => {
     const bCount = s.boards.length;
     html += `<div class="subject-row"><span class="sr-name">${s.icon || '📘'} ${escapeHtml(s.name)} <span class="q-meta">（${bCount} 板块）</span></span>
-      <span><button class="icon-btn" data-edit="${s.id}">✎</button> <button class="icon-btn danger" data-del="${s.id}">🗑</button></span></div>`;
+      <span><button class="icon-btn" data-edit="${s.id}">${icon('edit')}</button> <button class="icon-btn danger" data-del="${s.id}">${icon('trash')}</button></span></div>`;
   });
   openModal('科目管理', html, () => {
     $('#sm-add').onclick = () => openSubjectForm(null, openSubjectManage);
@@ -1318,10 +1392,10 @@ function openManageBoard(sid, bid) {
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
         <strong>${escapeHtml(p.title)}</strong><span class="tag self">${escapeHtml(p.grade || '通用')}</span>
       </div>
-      <div style="margin:8px 0;"><button class="btn ghost sm" data-pedit="${p.id}">编辑语料</button> <button class="btn ghost sm" data-pdel="${p.id}">删除语料</button> <button class="btn ghost sm" data-qadd="${p.id}">＋ 新增题目</button></div>
+      <div style="margin:8px 0;"><button class="btn ghost sm" data-pedit="${p.id}">编辑语料</button> <button class="btn ghost sm" data-pdel="${p.id}">删除语料</button> <button class="btn ghost sm" data-qadd="${p.id}">${icon('plus')} 新增题目</button></div>
       ${p.questions.map((q, i) => `<div style="display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-top:1px dashed var(--line);">
         <span style="font-size:14px;">${i + 1}. ${escapeHtml(q.stem.slice(0, 38))}${q.stem.length > 38 ? '…' : ''} <span class="q-meta">[${typeName(q.type)}]</span></span>
-        <span><button class="icon-btn" data-qedit="${q.id}">✎</button> <button class="icon-btn danger" data-qdel="${q.id}">🗑</button></span></div>`).join('')}
+        <span><button class="icon-btn" data-qedit="${q.id}">${icon('edit')}</button> <button class="icon-btn danger" data-qdel="${q.id}">${icon('trash')}</button></span></div>`).join('')}
     </div>`;
   });
   openModal('管理题目 · ' + board.name, html, () => {
@@ -1374,7 +1448,7 @@ function openQuestionForm(sid, bid, passageId, question) {
     </div>
     <div class="field"><label>题干</label><textarea id="f-stem">${escapeHtml(q.stem)}</textarea></div>
     <div class="field" id="f-options-field"><label>选项（单选/多选）</label><div id="f-options">${renderOptionEditors(q)}</div>
-      <button class="btn ghost sm" id="f-add-opt">＋ 添加选项</button></div>
+      <button class="btn ghost sm" id="f-add-opt">${icon('plus')} 添加选项</button></div>
     <div class="field" id="f-answer-field"></div>
     <div class="field"><label>解析</label><textarea id="f-exp">${escapeHtml(q.explanation || '')}</textarea></div>
     <div class="field-row">
@@ -1417,7 +1491,7 @@ function openQuestionForm(sid, bid, passageId, question) {
 function findPassageOf(board, qid) { for (const p of board.passages) if (p.questions.some(q => q.id === qid)) return p; return null; }
 function renderOptionEditors(q) {
   return q.options.map((o, i) => `<div class="opt-edit"><span style="width:22px;color:var(--muted)">${answerLabel(i)}</span>
-    <input type="text" data-oi="${i}" value="${escapeHtml(o)}" placeholder="选项内容"><button class="icon-btn danger" data-del="${i}">✕</button></div>`).join('');
+    <input type="text" data-oi="${i}" value="${escapeHtml(o)}" placeholder="选项内容"><button class="icon-btn danger" data-del="${i}">${icon('close')}</button></div>`).join('');
 }
 function bindOptEditors(q) {
   $$('#f-options [data-oi]').forEach(inp => inp.oninput = () => { q.options[+inp.dataset.oi] = inp.value; });
@@ -1573,7 +1647,7 @@ function stopSpeech() { if ('speechSynthesis' in window) window.speechSynthesis.
 
 /* ----------------------- 事件绑定 ----------------------- */
 function bindEvents() {
-  $$('.side-item').forEach(b => b.onclick = () => { const v = b.dataset.view; if (v === 'io') { openIoModal(); return; } showView(v); if (v === 'wrong') renderWrong(); });
+  $$('.side-item').forEach(b => b.onclick = () => { closeDrawer(); const v = b.dataset.view; if (v === 'io') { openIoModal(); return; } showView(v); if (v === 'wrong') renderWrong(); });
   const goIo = $('#btn-go-io'); if (goIo) goIo.onclick = () => openIoModal();
   $('#btn-board-back').onclick = () => { renderHome(); showView('home'); };
   $('#btn-subject-manage').onclick = openSubjectManage;
@@ -1595,6 +1669,30 @@ function bindEvents() {
   $('#btn-clear-wrong').onclick = () => { if (confirm('确定清空错题本？')) { localStorage.removeItem(WRONG_KEY); renderWrong(); renderHome(); } };
   $('#modal-close').onclick = closeModal;
   $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+
+  $$('#bottom-nav button').forEach(b => b.onclick = () => {
+    const v = b.dataset.view;
+    if (b.dataset.action === 'io') { closeDrawer(); openIoModal(); return; }
+    if (v) { closeDrawer(); showView(v); if (v === 'wrong') renderWrong(); }
+  });
+  const burger = document.getElementById('hamburger');
+  const scrim = document.getElementById('scrim');
+  if (burger) burger.onclick = () => { document.querySelector('.sidebar').classList.add('open'); scrim.classList.add('show'); };
+  if (scrim) scrim.onclick = () => closeDrawer();
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('view-practice').classList.contains('active')) return;
+    const t = (e.target.tagName || '').toLowerCase();
+    if (t === 'input' || t === 'textarea' || t === 'select') return;
+    if (e.key === 'Enter') { e.preventDefault(); nextItem(); return; }
+    if (/^[1-9]$/.test(e.key)) {
+      let q = e.target.closest ? e.target.closest('.question') : null;
+      if (!q) q = document.querySelector('.question');
+      if (!q) return;
+      const opts = Array.from(q.querySelectorAll('.opt'));
+      const idx = +e.key - 1;
+      if (idx < opts.length) { const inp = opts[idx].querySelector('input'); if (inp) { inp.checked = true; inp.dispatchEvent(new Event('change')); } }
+    }
+  });
 }
 
 /* ----------------------- 启动 ----------------------- */
@@ -1604,6 +1702,6 @@ async function init() {
   else { try { const res = await fetch('data/questions.json'); if (res.ok) BANK = await res.json(); } catch (e) {} if (!BANK) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); }
   GRADES = BANK.grades && BANK.grades.length ? BANK.grades : ['小学', '初中', '高中'];
   SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
-  bindEvents(); renderHome(); showView('home');
+  bindEvents(); mountIcons(); renderHome(); showView('home');
 }
 init();
