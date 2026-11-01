@@ -920,7 +920,17 @@ const uid = p => p + '_' + Date.now().toString(36) + Math.random().toString(36).
 function loadBank() { try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) {} return null; }
 function saveBank() { localStorage.setItem(STORE_KEY, JSON.stringify(BANK)); }
 function getProgress() { try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; } catch (e) { return {}; } }
-function getWrong() { try { return JSON.parse(localStorage.getItem(WRONG_KEY)) || []; } catch (e) { return []; } }
+function getWrong() {
+  let arr;
+  try { arr = JSON.parse(localStorage.getItem(WRONG_KEY)); } catch (e) { arr = null; }
+  if (!Array.isArray(arr)) return [];
+  // 清洗：只保留 key 与 q 字段都有效的记录，剔除早期旧格式/损坏数据，避免全站崩溃
+  const clean = arr.filter(r => r && r.key && r.q && typeof r.q === 'object');
+  if (clean.length !== arr.length) {
+    try { localStorage.setItem(WRONG_KEY, JSON.stringify(clean)); } catch (e) {}
+  }
+  return clean;
+}
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 function answerLabel(i) { return String.fromCharCode(65 + i); }
 function getSubject(id) { return BANK.subjects.find(s => s.id === id); }
@@ -1138,7 +1148,7 @@ function renderDashboard() {
   }
 
   const tagCount = {};
-  wrong.forEach(r => (r.q.tags || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; }));
+  wrong.forEach(r => ((r.q && r.q.tags) || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; }));
   const top = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const wc = document.getElementById('weak-card');
   wc.innerHTML = '<div class="dash-title">薄弱点诊断</div>'
