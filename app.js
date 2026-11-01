@@ -12,9 +12,9 @@ const PROGRESS_KEY = 'quizbank_progress';
 const SAMPLE_BANK = {
   "version": "3.0",
   "grades": [
-    "小学",
-    "初中",
-    "高中"
+    {"name":"小学","levels":["一年级","二年级","三年级","四年级","五年级","六年级"]},
+    {"name":"初中","levels":["初一","初二","初三"]},
+    {"name":"高中","levels":["高一","高二","高三"]}
   ],
   "subjects": [
     {
@@ -32,7 +32,7 @@ const SAMPLE_BANK = {
             {
               "id": "cn_read_p1",
               "title": "小松鼠过冬",
-              "grade": "小学",
+              "grade": "一年级",
               "text": "秋天到了，树林里的果子越来越少。小松鼠蹦蹦一边储藏松果，一边发愁：冬天那么长，这些够吃吗？妈妈笑着说：“别担心，我们每天存一点，慢慢就够啦。”\n果然，整个冬天，蹦蹦靠着秋天存下的松果，过得又暖和又饱足。它明白了：提前准备，比临时着急更有用。",
               "questions": [
                 {
@@ -93,7 +93,7 @@ const SAMPLE_BANK = {
             {
               "id": "cn_read_p2",
               "title": "坚持的力量",
-              "grade": "初中",
+              "grade": "初一",
               "text": "有个年轻人向一位书法家请教成功的秘诀。书法家让他每天写一百个大字，坚持一个月。年轻人照做了，可一个月后水平并无明显长进，便想放弃。\n书法家问他：“你写的纸用了多少？”年轻人说：“三十张。”书法家说：“再写三十张，再来问我。”又过一个月，年轻人的字果然有了神采。\n原来，所谓的天赋，常常是看不见的日积月累。把一件简单的事重复做、认真做，时间自会给出答案。",
               "questions": [
                 {
@@ -153,7 +153,7 @@ const SAMPLE_BANK = {
             {
               "id": "cn_read_p3",
               "title": "信息时代的专注力",
-              "grade": "高中",
+              "grade": "高一",
               "text": "打开手机，平均不到十分钟我们就会忍不住看一眼通知；读完一篇长文前，手指已经滑向了下一条短视频。注意力，正在成为这个时代最稀缺的资源。\n研究表明，频繁的任务切换会显著拖慢思考深度。当我们一边回消息一边写报告，表面高效，实则错误率上升、创意下降。真正的专注，不是更长时间地坐在桌前，而是主动屏蔽干扰、为重要的事留出整块时间。\n保护专注力，或许从关掉一个不必要的推送开始。",
               "questions": [
                 {
@@ -221,7 +221,7 @@ const SAMPLE_BANK = {
             {
               "id": "cn_poem_p1",
               "title": "《静夜思》李白",
-              "grade": "初中",
+              "grade": "初二",
               "text": "《静夜思》［唐］李白\n床前明月光，疑是地上霜。\n举头望明月，低头思故乡。",
               "questions": [
                 {
@@ -289,7 +289,7 @@ const SAMPLE_BANK = {
             {
               "id": "cn_basic_p1",
               "title": "基础知识练习",
-              "grade": "初中",
+              "grade": "初三",
               "text": "",
               "questions": [
                 {
@@ -348,7 +348,7 @@ const SAMPLE_BANK = {
             {
               "id": "math_wrong_p1",
               "title": "易错专项 · 折扣问题",
-              "grade": "初中",
+              "grade": "初一",
               "text": "某商品原价 100 元，打八折后售价多少元？",
               "questions": [
                 {
@@ -369,7 +369,7 @@ const SAMPLE_BANK = {
             {
               "id": "math_wrong_p2",
               "title": "易错专项 · 导数",
-              "grade": "高中",
+              "grade": "高二",
               "text": "已知函数 f(x) = x²，求 f'(2)。",
               "questions": [
                 {
@@ -397,7 +397,7 @@ const SAMPLE_BANK = {
             {
               "id": "math_drill_p1",
               "title": "专项 · 一元一次方程",
-              "grade": "初中",
+              "grade": "初二",
               "text": "解方程：2x + 3 = 11。",
               "questions": [
                 {
@@ -425,7 +425,7 @@ const SAMPLE_BANK = {
             {
               "id": "math_exam_p1",
               "title": "真题 · 集合",
-              "grade": "高中",
+              "grade": "高三",
               "text": "已知集合 A = {1, 2}，B = {2, 3}。",
               "questions": [
                 {
@@ -467,7 +467,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_listen_p1",
               "title": "At the Zoo（在动物园）",
-              "grade": "小学",
+              "grade": "二年级",
               "text": "Listen to the dialogue.\nA: Look, a big elephant! Do you like elephants?\nB: Yes! And I like the red balloon in my hand.\nA: How many balloons do you have?\nB: I have three. One red, one blue, and one yellow.\nA: Great! Let's see the pandas next.",
               "questions": [
                 {
@@ -528,7 +528,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_listen_p2",
               "title": "A Phone Call（一通电话）",
-              "grade": "初中",
+              "grade": "初三",
               "text": "Listen to the phone call.\nMom: Hi sweetie, how was your exam today?\nTom: It was okay, but math was a bit hard.\nMom: Don't worry. Did you eat lunch?\nTom: Yes, I had noodles with Lisa at twelve.\nMom: Good. I'll pick you up at five. Love you!\nTom: Love you too, Mom.",
               "questions": [
                 {
@@ -588,7 +588,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_listen_p3",
               "title": "A Weather Report（天气预报）",
-              "grade": "高中",
+              "grade": "高一",
               "text": "Listen to the short weather report.\nGood morning. Today will be mostly sunny with a high of twenty-two degrees. Winds will be light from the west. Tonight, clouds will move in and there is a thirty percent chance of rain after midnight. Tomorrow looks cooler, around seventeen degrees, with showers in the afternoon. If you plan to travel, expect some delays after lunch. Have a great day!",
               "questions": [
                 {
@@ -656,7 +656,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_read_p1",
               "title": "The Internet and Us",
-              "grade": "初中",
+              "grade": "初一",
               "text": "The internet has changed how we learn, shop, and talk to friends. With a phone, we can watch videos, send messages, and find answers in seconds. This convenience is amazing.\nHowever, spending too much time online can hurt us. Some people scroll for hours and forget to sleep or meet friends in real life. Others believe everything they read without checking.\nThe key is balance. Use the internet as a tool, not a master. When we control our screen time, technology helps us instead of controlling us.",
               "questions": [
                 {
@@ -716,7 +716,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_read_p2",
               "title": "The Quiet Power of Reading",
-              "grade": "高中",
+              "grade": "高二",
               "text": "Reading is often praised for building vocabulary, but its deeper value lies elsewhere. When we read a novel, we temporarily step into another person's mind. This mental simulation of others' thoughts and feelings strengthens what psychologists call “theory of mind” — the ability to understand that other people may hold beliefs different from our own.\nA growing body of research suggests that frequent readers are better at reading social cues and showing empathy in real life. In one study, people who read literary fiction performed better on tests measuring social perception than those who read non-fiction or nothing at all.\nNone of this requires speed. In fact, slow, attentive reading may matter more than the number of books finished. The point is not to consume texts, but to dwell in them.",
               "questions": [
                 {
@@ -784,7 +784,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_vocab_p1",
               "title": "词汇积累",
-              "grade": "初中",
+              "grade": "初二",
               "text": "",
               "questions": [
                 {
@@ -852,7 +852,7 @@ const SAMPLE_BANK = {
             {
               "id": "en_grammar_p1",
               "title": "语法训练",
-              "grade": "初中",
+              "grade": "初三",
               "text": "",
               "questions": [
                 {
@@ -944,7 +944,8 @@ const ICONS = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>',
   dot: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="4"/></svg>',
   back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg>',
-  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 19h14"/></svg>'
+  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 19h14"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>'
 };
 function icon(name) { return ICONS[name] || ''; }
 function mountIcons() { document.querySelectorAll('[data-icon]').forEach(el => { const n = el.getAttribute('data-icon'); if (ICONS[n]) el.innerHTML = ICONS[n]; }); }
@@ -974,9 +975,21 @@ function diffTag(d) {
   const c = d === '易' ? 'var(--accent)' : d === '难' ? 'var(--orange)' : '#b0894a';
   return d ? `<span class="q-meta" style="color:${c}">［${d}］</span>` : '';
 }
+function stageOf(g) {
+  if (!g) return null;
+  for (const grp of GRADES) { if (grp.name === g) return g; if (grp.levels.includes(g)) return grp.name; }
+  return null;
+}
+function allLevels() { return GRADES.flatMap(g => g.levels); }
 function passageMatch(p) {
   if (currentSemester !== '全部' && (p.semester || '') !== currentSemester) return false;
-  return currentGrade === '全部' || !p.grade || p.grade === currentGrade;
+  if (currentGrade === '全部') return true;
+  if (!p.grade) return false;                       // 未指定年级的语料仅在「全部」出现
+  const selStage = stageOf(currentGrade);
+  if (currentGrade === selStage) {                  // 选了学段（如「初中」）→ 显示该学段全部年级
+    return p.grade === currentGrade || stageOf(p.grade) === currentGrade;
+  }
+  return p.grade === currentGrade;                  // 选了具体年级（如「初一」）→ 精确匹配
 }
 function filteredPassages(board) { return board.passages.filter(passageMatch); }
 
@@ -999,12 +1012,24 @@ function renderFilters() {
     sp.appendChild(b);
   });
   const gp = $('#grade-pills'); gp.innerHTML = '';
-  ['全部', ...GRADES].forEach(g => {
-    const b = document.createElement('button');
-    b.className = 'pill' + (g === currentGrade ? ' active' : '');
-    b.textContent = g;
-    b.onclick = () => { currentGrade = g; renderHome(); };
-    gp.appendChild(b);
+  const allG = document.createElement('button');
+  allG.className = 'pill' + (currentGrade === '全部' ? ' active' : '');
+  allG.textContent = '全部';
+  allG.onclick = () => { currentGrade = '全部'; renderHome(); };
+  gp.appendChild(allG);
+  GRADES.forEach(grp => {
+    const sb = document.createElement('button');
+    sb.className = 'pill stage' + (grp.name === currentGrade ? ' active' : '');
+    sb.textContent = grp.name;
+    sb.onclick = () => { currentGrade = grp.name; renderHome(); };
+    gp.appendChild(sb);
+    grp.levels.forEach(lv => {
+      const b = document.createElement('button');
+      b.className = 'pill' + (lv === currentGrade ? ' active' : '');
+      b.textContent = lv;
+      b.onclick = () => { currentGrade = lv; renderHome(); };
+      gp.appendChild(b);
+    });
   });
   const sc = $('#subject-chips'); sc.innerHTML = '';
   const all = document.createElement('button');
@@ -1273,16 +1298,30 @@ function saveWrong(subject, board, passage, q) {
   if (idx >= 0) arr[idx] = rec; else arr.push(rec);
   localStorage.setItem(WRONG_KEY, JSON.stringify(arr));
 }
-function renderWrong() {
-  const arr = getWrong();
-  const box = $('#wrong-list');
-  if (!arr.length) {
-    box.innerHTML = '<div class="empty">还没有错题。练习中答错的题目会自动归集到这里，并按科目 → 板块分组展示，方便你集中攻克薄弱点。'
-      + '<div class="bd-actions" style="margin-top:14px;"><button class="btn primary sm" id="btn-empty-go">去做几道题</button></div></div>';
-    const ge = document.getElementById('btn-empty-go');
-    if (ge) ge.onclick = () => { renderHome(); showView('home'); };
-    return;
+let wrongDemoCache = null;
+function buildWrongDemo() {
+  const demo = []; const usedSubj = new Set();
+  for (const s of BANK.subjects) {
+    if (usedSubj.has(s.id)) continue;
+    for (const b of s.boards) {
+      for (const p of b.passages) {
+        if (p.questions.length) {
+          demo.push({ key: 'demo_' + p.questions[0].id + '_' + b.id + ':' + p.id, subjectName: s.name, boardName: b.name, passageTitle: p.title, demo: true, q: Object.assign({}, p.questions[0]) });
+          usedSubj.add(s.id);
+          break;
+        }
+      }
+      if (usedSubj.has(s.id)) break;
+    }
+    if (demo.length >= 3) break;
   }
+  return demo;
+}
+function renderWrong() {
+  const box = $('#wrong-list');
+  let arr = getWrong();
+  let isDemo = false;
+  if (!arr.length) { if (!wrongDemoCache) wrongDemoCache = buildWrongDemo(); arr = wrongDemoCache; isDemo = true; }
   // 按「科目 → 板块」分组，与全站结构一致
   const bySubject = {};
   const subjectOrder = [];
@@ -1295,7 +1334,9 @@ function renderWrong() {
   });
   const totalBoards = subjectOrder.reduce((n, s) => n + Object.keys(bySubject[s]).length, 0);
 
-  let html = '<div class="wrong-summary">'
+  let html = '';
+  if (isDemo) html += '<div class="wrong-banner">' + icon('info') + ' 示例展示 · 错题本按「科目 → 板块」分组。练习中答错的题目会自动归集到这里，并替换此示例。</div>';
+  html += '<div class="wrong-summary">'
     + '<span class="ws-pill">' + icon('wrong') + ' 共 <b>' + arr.length + '</b> 道错题</span>'
     + '<span class="ws-pill">' + icon('book') + ' 覆盖 <b>' + subjectOrder.length + '</b> 个科目</span>'
     + '<span class="ws-pill">' + icon('grid') + ' 涉及 <b>' + totalBoards + '</b> 个板块</span>'
@@ -1318,7 +1359,7 @@ function renderWrong() {
           + '<div class="explanation">解析：' + escapeHtml(r.q.explanation || '（暂无解析）') + '</div>'
           + '<div class="bd-actions" style="margin-top:10px;">'
           + '<button class="btn ghost sm" data-act="rep">重练此题</button>'
-          + '<button class="btn ghost sm" data-act="rm">移除</button>'
+          + (isDemo ? '' : '<button class="btn ghost sm" data-act="rm">移除</button>')
           + '</div></div>';
       });
     });
@@ -1328,8 +1369,9 @@ function renderWrong() {
   box.innerHTML = html;
   box.querySelectorAll('.result-item').forEach(div => {
     const key = div.dataset.key;
-    div.querySelector('[data-act=rep]').onclick = () => { const r = getWrong().find(x => x.key === key); if (r) repracticeOne(r); };
-    div.querySelector('[data-act=rm]').onclick = () => { const a = getWrong().filter(x => x.key !== key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
+    div.querySelector('[data-act=rep]').onclick = () => { const r = arr.find(x => x.key === key); if (r) repracticeOne(r); };
+    const rmBtn = div.querySelector('[data-act=rm]');
+    if (rmBtn) rmBtn.onclick = () => { const a = getWrong().filter(x => x.key !== key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
   });
 }
 /* 预览用：?demo=1 时塞入示例错题，方便查看分组排版（看完可用「清空错题本」还原） */
@@ -1463,10 +1505,10 @@ function openManageBoard(sid, bid) {
 }
 function openPassageForm(sid, bid, passage) {
   const isEdit = !!passage;
-  const p = passage || { title: '', grade: GRADES[0] || '', text: '', questions: [] };
+  const p = passage || { title: '', grade: allLevels()[0] || '', text: '', questions: [] };
   openModal(isEdit ? '编辑语料' : '新增语料', `
     <div class="field"><label>语料标题</label><input type="text" id="f-title" value="${escapeHtml(p.title)}" placeholder="如 阅读训练一"></div>
-    <div class="field"><label>年级（用于筛选）</label><select id="f-grade"><option value="">通用</option>${GRADES.map(g => `<option ${p.grade === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
+    <div class="field"><label>年级（用于筛选）</label><select id="f-grade"><option value="">通用</option>${allLevels().map(g => `<option ${p.grade === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
     <div class="field"><label>语料正文（阅读/听力材料，可空）</label><textarea id="f-text">${escapeHtml(p.text)}</textarea></div>
     <div class="modal-actions"><button class="btn ghost" id="f-cancel">取消</button><button class="btn primary" id="f-save">保存</button></div>
   `, () => {
@@ -1750,7 +1792,7 @@ async function init() {
   const stored = loadBank();
   if (stored) BANK = stored;
   else { try { const res = await fetch('data/questions.json'); if (res.ok) BANK = await res.json(); } catch (e) {} if (!BANK) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); }
-  GRADES = BANK.grades && BANK.grades.length ? BANK.grades : ['小学', '初中', '高中'];
+  GRADES = BANK.grades && BANK.grades.length ? BANK.grades : [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
   SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
   if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
   bindEvents(); mountIcons(); renderHome(); showView('home');

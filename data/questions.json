@@ -1,9 +1,33 @@
 {
   "version": "3.0",
   "grades": [
-    "小学",
-    "初中",
-    "高中"
+    {
+      "name": "小学",
+      "levels": [
+        "一年级",
+        "二年级",
+        "三年级",
+        "四年级",
+        "五年级",
+        "六年级"
+      ]
+    },
+    {
+      "name": "初中",
+      "levels": [
+        "初一",
+        "初二",
+        "初三"
+      ]
+    },
+    {
+      "name": "高中",
+      "levels": [
+        "高一",
+        "高二",
+        "高三"
+      ]
+    }
   ],
   "subjects": [
     {
@@ -21,7 +45,7 @@
             {
               "id": "cn_read_p1",
               "title": "小松鼠过冬",
-              "grade": "小学",
+              "grade": "一年级",
               "text": "秋天到了，树林里的果子越来越少。小松鼠蹦蹦一边储藏松果，一边发愁：冬天那么长，这些够吃吗？妈妈笑着说：“别担心，我们每天存一点，慢慢就够啦。”\n果然，整个冬天，蹦蹦靠着秋天存下的松果，过得又暖和又饱足。它明白了：提前准备，比临时着急更有用。",
               "questions": [
                 {
@@ -82,7 +106,7 @@
             {
               "id": "cn_read_p2",
               "title": "坚持的力量",
-              "grade": "初中",
+              "grade": "初一",
               "text": "有个年轻人向一位书法家请教成功的秘诀。书法家让他每天写一百个大字，坚持一个月。年轻人照做了，可一个月后水平并无明显长进，便想放弃。\n书法家问他：“你写的纸用了多少？”年轻人说：“三十张。”书法家说：“再写三十张，再来问我。”又过一个月，年轻人的字果然有了神采。\n原来，所谓的天赋，常常是看不见的日积月累。把一件简单的事重复做、认真做，时间自会给出答案。",
               "questions": [
                 {
@@ -142,7 +166,7 @@
             {
               "id": "cn_read_p3",
               "title": "信息时代的专注力",
-              "grade": "高中",
+              "grade": "高一",
               "text": "打开手机，平均不到十分钟我们就会忍不住看一眼通知；读完一篇长文前，手指已经滑向了下一条短视频。注意力，正在成为这个时代最稀缺的资源。\n研究表明，频繁的任务切换会显著拖慢思考深度。当我们一边回消息一边写报告，表面高效，实则错误率上升、创意下降。真正的专注，不是更长时间地坐在桌前，而是主动屏蔽干扰、为重要的事留出整块时间。\n保护专注力，或许从关掉一个不必要的推送开始。",
               "questions": [
                 {
@@ -210,7 +234,7 @@
             {
               "id": "cn_poem_p1",
               "title": "《静夜思》李白",
-              "grade": "初中",
+              "grade": "初二",
               "text": "《静夜思》［唐］李白\n床前明月光，疑是地上霜。\n举头望明月，低头思故乡。",
               "questions": [
                 {
@@ -278,7 +302,7 @@
             {
               "id": "cn_basic_p1",
               "title": "基础知识练习",
-              "grade": "初中",
+              "grade": "初三",
               "text": "",
               "questions": [
                 {
@@ -337,7 +361,7 @@
             {
               "id": "math_wrong_p1",
               "title": "易错专项 · 折扣问题",
-              "grade": "初中",
+              "grade": "初一",
               "text": "某商品原价 100 元，打八折后售价多少元？",
               "questions": [
                 {
@@ -358,7 +382,7 @@
             {
               "id": "math_wrong_p2",
               "title": "易错专项 · 导数",
-              "grade": "高中",
+              "grade": "高二",
               "text": "已知函数 f(x) = x²，求 f'(2)。",
               "questions": [
                 {
@@ -386,7 +410,7 @@
             {
               "id": "math_drill_p1",
               "title": "专项 · 一元一次方程",
-              "grade": "初中",
+              "grade": "初二",
               "text": "解方程：2x + 3 = 11。",
               "questions": [
                 {
@@ -414,7 +438,7 @@
             {
               "id": "math_exam_p1",
               "title": "真题 · 集合",
-              "grade": "高中",
+              "grade": "高三",
               "text": "已知集合 A = {1, 2}，B = {2, 3}。",
               "questions": [
                 {
@@ -456,7 +480,7 @@
             {
               "id": "en_listen_p1",
               "title": "At the Zoo（在动物园）",
-              "grade": "小学",
+              "grade": "二年级",
               "text": "Listen to the dialogue.\nA: Look, a big elephant! Do you like elephants?\nB: Yes! And I like the red balloon in my hand.\nA: How many balloons do you have?\nB: I have three. One red, one blue, and one yellow.\nA: Great! Let's see the pandas next.",
               "questions": [
                 {
@@ -517,7 +541,7 @@
             {
               "id": "en_listen_p2",
               "title": "A Phone Call（一通电话）",
-              "grade": "初中",
+              "grade": "初三",
               "text": "Listen to the phone call.\nMom: Hi sweetie, how was your exam today?\nTom: It was okay, but math was a bit hard.\nMom: Don't worry. Did you eat lunch?\nTom: Yes, I had noodles with Lisa at twelve.\nMom: Good. I'll pick you up at five. Love you!\nTom: Love you too, Mom.",
               "questions": [
                 {
@@ -577,7 +601,7 @@
             {
               "id": "en_listen_p3",
               "title": "A Weather Report（天气预报）",
-              "grade": "高中",
+              "grade": "高一",
               "text": "Listen to the short weather report.\nGood morning. Today will be mostly sunny with a high of twenty-two degrees. Winds will be light from the west. Tonight, clouds will move in and there is a thirty percent chance of rain after midnight. Tomorrow looks cooler, around seventeen degrees, with showers in the afternoon. If you plan to travel, expect some delays after lunch. Have a great day!",
               "questions": [
                 {
@@ -645,7 +669,7 @@
             {
               "id": "en_read_p1",
               "title": "The Internet and Us",
-              "grade": "初中",
+              "grade": "初一",
               "text": "The internet has changed how we learn, shop, and talk to friends. With a phone, we can watch videos, send messages, and find answers in seconds. This convenience is amazing.\nHowever, spending too much time online can hurt us. Some people scroll for hours and forget to sleep or meet friends in real life. Others believe everything they read without checking.\nThe key is balance. Use the internet as a tool, not a master. When we control our screen time, technology helps us instead of controlling us.",
               "questions": [
                 {
@@ -705,7 +729,7 @@
             {
               "id": "en_read_p2",
               "title": "The Quiet Power of Reading",
-              "grade": "高中",
+              "grade": "高二",
               "text": "Reading is often praised for building vocabulary, but its deeper value lies elsewhere. When we read a novel, we temporarily step into another person's mind. This mental simulation of others' thoughts and feelings strengthens what psychologists call “theory of mind” — the ability to understand that other people may hold beliefs different from our own.\nA growing body of research suggests that frequent readers are better at reading social cues and showing empathy in real life. In one study, people who read literary fiction performed better on tests measuring social perception than those who read non-fiction or nothing at all.\nNone of this requires speed. In fact, slow, attentive reading may matter more than the number of books finished. The point is not to consume texts, but to dwell in them.",
               "questions": [
                 {
@@ -773,7 +797,7 @@
             {
               "id": "en_vocab_p1",
               "title": "词汇积累",
-              "grade": "初中",
+              "grade": "初二",
               "text": "",
               "questions": [
                 {
@@ -841,7 +865,7 @@
             {
               "id": "en_grammar_p1",
               "title": "语法训练",
-              "grade": "初中",
+              "grade": "初三",
               "text": "",
               "questions": [
                 {

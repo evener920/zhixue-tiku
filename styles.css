@@ -72,6 +72,10 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
 .pill:hover { border-color: var(--accent); color: var(--ink); }
 .pill.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-soft); }
 .pill.add { color: var(--accent); border-style: dashed; }
+/* 年级筛选：学段标签（小学/初中/高中）与具体年级分组 */
+.pill-group .pill.stage { margin-left: 12px; background: #f3ede2; color: var(--ink); border-color: #e6ddcc; font-weight: 700; }
+.pill-group .pill.stage:first-of-type { margin-left: 0; }
+.pill-group .pill.stage.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* 卡片 */
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; margin-bottom: 18px; }
@@ -169,6 +173,8 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
 
 /* 错题本按结构分组 */
 .wrong-summary { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 20px; }
+.wrong-banner { display: flex; align-items: flex-start; gap: 8px; background: #eef4fb; border: 1px solid #d7e4f2; color: #3f6c97; border-radius: 12px; padding: 12px 14px; margin: 4px 0 18px; font-size: 13.5px; line-height: 1.6; }
+.wrong-banner svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; color: #4a82b8; }
 .ws-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; font-size: 13px; color: var(--ink); }
 .ws-pill svg { width: 15px; height: 15px; color: var(--accent); }
 .ws-pill b { color: var(--accent); font-weight: 700; }
