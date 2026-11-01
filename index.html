@@ -1730,6 +1730,9 @@ function startPractice(sid, bid) {
 }
 const AP_PLAY = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 const AP_PAUSE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+// 音频链接可能已是合法 percent-encoded 的 URL（含 %E6%95%99 这类编码中文），
+// 若再套 encodeURI 会把 % 编码成 %25 导致路径被毁、加载失败。仅当含原始非 ASCII/空格时才编码。
+function audioSrc(u) { return /[-￿\s]/.test(u) ? encodeURI(u) : u; }
 function bindAudioPlayer() {
   const wrap = $('#audio-player');
   if (!wrap) return;
@@ -1751,8 +1754,12 @@ function bindAudioPlayer() {
   audio.addEventListener('play', () => setIcon(true));
   audio.addEventListener('pause', () => setIcon(false));
   btn.addEventListener('click', () => {
-    if (audio.paused) audio.play().then(() => setIcon(true)).catch(() => {});
-    else { audio.pause(); setIcon(false); }
+    if (audio.paused) {
+      audio.play().then(() => setIcon(true)).catch(() => {
+        if (dur) { dur.textContent = '加载失败'; dur.style.color = '#c0392b'; }
+        btn.title = '音频加载失败，请检查网络或刷新页面后重试';
+      });
+    } else { audio.pause(); setIcon(false); }
   });
   track.addEventListener('click', e => {
     const r = track.getBoundingClientRect();
@@ -1786,7 +1793,7 @@ function renderPracticeItem() {
               <div class="ap-track" id="ap-track"><div class="ap-fill" id="ap-fill"></div><div class="ap-knob" id="ap-knob"></div></div>
               <div class="ap-time"><span id="ap-cur">0:00</span> / <span id="ap-dur">0:00</span></div>
             </div>
-            <audio id="ap-audio" preload="metadata" src="${encodeURI(it.audio)}"></audio>
+            <audio id="ap-audio" preload="metadata" src="${audioSrc(it.audio)}"></audio>
           </div>
         </div>`;
     } else {
