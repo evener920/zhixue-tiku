@@ -330,13 +330,13 @@
       "boards": [
         {
           "id": "math_wrong",
-          "name": "错题",
+          "name": "易错专项",
           "type": "practice",
-          "desc": "归集日常错题，反复重练。",
+          "desc": "高频易错题集中突破，练会为止。",
           "passages": [
             {
               "id": "math_wrong_p1",
-              "title": "错题本 · 折扣问题",
+              "title": "易错专项 · 折扣问题",
               "grade": "初中",
               "text": "某商品原价 100 元，打八折后售价多少元？",
               "questions": [
@@ -357,7 +357,7 @@
             },
             {
               "id": "math_wrong_p2",
-              "title": "错题本 · 导数",
+              "title": "易错专项 · 导数",
               "grade": "高中",
               "text": "已知函数 f(x) = x²，求 f'(2)。",
               "questions": [

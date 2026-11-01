@@ -341,13 +341,13 @@ const SAMPLE_BANK = {
       "boards": [
         {
           "id": "math_wrong",
-          "name": "错题",
+          "name": "易错专项",
           "type": "practice",
-          "desc": "归集日常错题，反复重练。",
+          "desc": "高频易错题集中突破，练会为止。",
           "passages": [
             {
               "id": "math_wrong_p1",
-              "title": "错题本 · 折扣问题",
+              "title": "易错专项 · 折扣问题",
               "grade": "初中",
               "text": "某商品原价 100 元，打八折后售价多少元？",
               "questions": [
@@ -368,7 +368,7 @@ const SAMPLE_BANK = {
             },
             {
               "id": "math_wrong_p2",
-              "title": "错题本 · 导数",
+              "title": "易错专项 · 导数",
               "grade": "高中",
               "text": "已知函数 f(x) = x²，求 f'(2)。",
               "questions": [
@@ -1332,6 +1332,19 @@ function renderWrong() {
     div.querySelector('[data-act=rm]').onclick = () => { const a = getWrong().filter(x => x.key !== key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
   });
 }
+/* 预览用：?demo=1 时塞入示例错题，方便查看分组排版（看完可用「清空错题本」还原） */
+function seedWrongDemo() {
+  if (getWrong().length) return;
+  const demo = [
+    { key: 'demo_yw_1', subjectName: '语文', boardName: '阅读', passageTitle: '记叙文阅读',
+      q: { id: 'demo_yw_1', type: 'single', stem: '下列加点词语在文中的含义，理解最恰当的一项是？', answer: 'B', options: ['A 表面意思', 'B 语境中的深层含义', 'C 作者本意', 'D 字面反义'], explanation: '结合上下文，词语在语境中产生深层含义，需联系全文主旨判断。', tags: ['词语理解', '主旨'] } },
+    { key: 'demo_yw_2', subjectName: '语文', boardName: '阅读', passageTitle: '记叙文阅读',
+      q: { id: 'demo_yw_2', type: 'single', stem: '关于本文写作手法，说法正确的一项是？', answer: 'C', options: ['A 对比', 'B 夸张', 'C 借景抒情', 'D 欲扬先抑'], explanation: '全文以景物描写烘托情感，属借景抒情。', tags: ['写作手法', '主旨'] } },
+    { key: 'demo_math_1', subjectName: '数学', boardName: '易错专项', passageTitle: '易错专项 · 折扣问题',
+      q: { id: 'demo_math_1', type: 'fill', stem: '某商品原价 200 元，打七五折后的售价是 ____ 元。', answer: '150', explanation: '200 × 0.75 = 150（元）。', tags: ['百分数', '折扣'] } }
+  ];
+  localStorage.setItem(WRONG_KEY, JSON.stringify(demo));
+}
 function repracticeOne(r) {
   quiz.subjectId = null; quiz.boardId = null; quiz.index = 0; quiz.mode = 'question';
   quiz.items = [{ title: r.passageTitle, text: '', mode: 'read', questions: [r.q] }];
@@ -1739,6 +1752,7 @@ async function init() {
   else { try { const res = await fetch('data/questions.json'); if (res.ok) BANK = await res.json(); } catch (e) {} if (!BANK) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); }
   GRADES = BANK.grades && BANK.grades.length ? BANK.grades : ['小学', '初中', '高中'];
   SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
+  if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
   bindEvents(); mountIcons(); renderHome(); showView('home');
 }
 init();
