@@ -12,19 +12,11 @@ app_src = open(f'{ROOT}/app.js', encoding='utf-8').read()
 css_src = open(f'{ROOT}/styles.css', encoding='utf-8').read()
 html = open(f'{ROOT}/index.html', encoding='utf-8').read()
 
-# 1) 注入新 CSS（幂等：已存在则跳过）
-NEW_CSS = """
-/* ---- 听力音频播放器 + 判断题 + 任务题提示 ---- */
-.listen-audio { width: 100%; max-width: 560px; height: 44px; margin-bottom: 14px; border-radius: 10px; }
-.passage-topic { font-size: 13px; color: #8a8175; margin: 2px 0 12px; }
-.q-instr { color: #6b6256; font-style: italic; font-weight: 500; }
-.task-note { background: #FFF7E6; border: 1px solid #F0D9A8; color: #8a6d3b; border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.6; margin: 4px 0 14px; display: flex; gap: 8px; align-items: flex-start; }
-.task-note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
-"""
-if '.listen-audio {' not in html:
-    html = html.replace('</style>', NEW_CSS + '</style>', 1)
-else:
-    print('CSS 已存在，跳过注入')
+# 1) 用最新 styles.css 整体替换 <style>...</style> 内部（保证 index.html 始终与 styles.css 一致）
+sty_open = html.index('<style>') + len('<style>')
+sty_close = html.index('</style>')
+html = html[:sty_open] + '\n' + css_src + '\n' + html[sty_close:]
+print('CSS 已用 styles.css 整体刷新')
 
 # 2) 替换数据块 window.EMBEDDED_BANK = {...};</script>
 data_json = json.dumps(bank, ensure_ascii=False, separators=(',', ':'))
