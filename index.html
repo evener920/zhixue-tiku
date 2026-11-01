@@ -1400,6 +1400,22 @@ div class="quiz-actions">
   ]
 };</script>
   <script>
+/* 全局错误浮层：任何脚本错误都直接显示在页面顶部，避免「空白无解」 */
+(function(){
+  function showErr(msg){
+    var el=document.getElementById('err-overlay');
+    if(!el){el=document.createElement('div');el.id='err-overlay';
+      el.style.cssText='position:fixed;left:0;right:0;top:0;z-index:2147483647;background:#b3261e;color:#fff;font:13px/1.55 -apple-system,system-ui,sans-serif;padding:10px 14px;white-space:pre-wrap;box-shadow:0 2px 10px rgba(0,0,0,.35)';
+      (document.body||document.documentElement).appendChild(el);}
+    el.textContent='⚠ 页面脚本出错（请把这段文字截图发给我）：\n'+msg;
+    el.style.display='block';
+  }
+  window.__showErr=showErr;
+  window.addEventListener('error',function(e){showErr((e.message||'未知错误')+(e.filename?('\n@ '+e.filename+':'+(e.lineno||'')):''));});
+  window.addEventListener('unhandledrejection',function(e){showErr('Promise未处理：'+((e.reason&&(e.reason.stack||e.reason.message))||e.reason));});
+})();
+</script>
+  <script>
 /* ===========================================================
    智学题库 v4 — 参考奶油色学习中心仪表盘重做
    布局：左固定栏 + 右"学习中心"；题库双列卡片网格；年级/科目胶囊筛选。
@@ -2379,8 +2395,10 @@ function isCorrect(q, sel) {
 }
 function formatAnswer(q, val) {
   if (val === undefined || val === null || (Array.isArray(val) && val.length === 0)) return '';
-  if (q.type === 'multiple') return (Array.isArray(val) ? val : [val]).map(i => answerLabel(i) + '. ' + q.options[i]).join('； ');
-  if (q.type === 'single') return answerLabel(val) + '. ' + q.options[val];
+  // 兼容答案以字母（A/B/C…）或数字索引存储两种情况
+  const toIdx = v => (typeof v === 'string' && /^[A-Z]$/.test(v)) ? v.charCodeAt(0) - 65 : v;
+  if (q.type === 'multiple') return (Array.isArray(val) ? val : [val]).map(i => { const k = toIdx(i); return answerLabel(k) + '. ' + (q.options && q.options[k] != null ? q.options[k] : i); }).join('； ');
+  if (q.type === 'single') { const k = toIdx(val); return answerLabel(k) + '. ' + (q.options && q.options[k] != null ? q.options[k] : val); }
   return String(val);
 }
 function diffTag(d) {
@@ -2745,67 +2763,56 @@ function buildWrongDemo() {
   return demo;
 }
 function renderWrong() {
-  try {
   const box = $('#wrong-list');
   if (!box) return;
-  let arr = getWrong();
-  let isDemo = false;
-  if (!arr.length) { if (!wrongDemoCache) wrongDemoCache = buildWrongDemo(); arr = wrongDemoCache; isDemo = true; }
-  // 按「科目 → 板块」分组，与全站结构一致
-  const bySubject = {};
-  const subjectOrder = [];
-  arr.forEach(r => {
-    const s = r.subjectName || '未分类';
-    const b = r.boardName || '未分类';
-    if (!bySubject[s]) { bySubject[s] = {}; subjectOrder.push(s); }
-    if (!bySubject[s][b]) bySubject[s][b] = [];
-    bySubject[s][b].push(r);
-  });
-  const totalBoards = subjectOrder.reduce((n, s) => n + Object.keys(bySubject[s]).length, 0);
-
-  let html = '';
-  if (isDemo) html += '<div class="wrong-banner">' + icon('info') + ' 示例展示 · 错题本按「科目 → 板块」分组。练习中答错的题目会自动归集到这里，并替换此示例。</div>';
-  html += '<div class="wrong-summary">'
-    + '<span class="ws-pill">' + icon('wrong') + ' 共 <b>' + arr.length + '</b> 道错题</span>'
-    + '<span class="ws-pill">' + icon('book') + ' 覆盖 <b>' + subjectOrder.length + '</b> 个科目</span>'
-    + '<span class="ws-pill">' + icon('grid') + ' 涉及 <b>' + totalBoards + '</b> 个板块</span>'
-    + '</div>';
-
-  subjectOrder.forEach(s => {
-    const boards = bySubject[s];
-    const sCount = Object.values(boards).reduce((n, a) => n + a.length, 0);
-    html += '<div class="wrong-group">';
-    html += '<div class="wg-head">' + icon('book') + '<span class="wg-name">' + escapeHtml(s) + '</span><span class="wg-count">' + sCount + ' 道</span></div>';
-    Object.keys(boards).forEach(b => {
-      const items = boards[b];
-      html += '<div class="wg-sub">' + escapeHtml(b) + ' <span class="wg-count">' + items.length + ' 道</span></div>';
-      items.forEach((r, i) => {
-        html += '<div class="card result-item" data-key="' + escapeHtml(r.key) + '">'
-          + '<span class="tag no">✗ 答错</span>'
-          + (r.passageTitle ? '<div class="user-ans">' + escapeHtml(r.passageTitle) + '</div>' : '')
-          + '<div class="q-stem"><span class="q-no">' + (i + 1) + '.</span>' + escapeHtml(r.q.stem) + '</div>'
-          + '<div class="user-ans">正确答案：' + formatAnswer(r.q, r.q.answer) + '</div>'
-          + '<div class="explanation">解析：' + escapeHtml(r.q.explanation || '（暂无解析）') + '</div>'
-          + '<div class="bd-actions" style="margin-top:10px;">'
-          + '<button class="btn ghost sm" data-act="rep">重练此题</button>'
-          + (isDemo ? '' : '<button class="btn ghost sm" data-act="rm">移除</button>')
-          + '</div></div>';
-      });
+  let arr = [];
+  try { arr = getWrong(); } catch (e) { arr = []; if (window.__showErr) window.__showErr('读取错题数据失败：' + (e.message||e)); }
+  arr = (arr || []).filter(r => r && r.q);
+  if (!arr.length) {
+    // 无真实错题：保留 index.html 中的静态示例，绝不清空、绝不空白
+    return;
+  }
+  try {
+    const bySubject = {}; const subjectOrder = [];
+    arr.forEach(r => {
+      const s = r.subjectName || '未分类';
+      const b = r.boardName || '未分类';
+      if (!bySubject[s]) { bySubject[s] = {}; subjectOrder.push(s); }
+      if (!bySubject[s][b]) bySubject[s][b] = [];
+      bySubject[s][b].push(r);
     });
-    html += '</div>';
-  });
-
-  box.innerHTML = html;
-  box.querySelectorAll('.result-item').forEach(div => {
-    const key = div.dataset.key;
-    div.querySelector('[data-act=rep]').onclick = () => { const r = arr.find(x => x.key === key); if (r) repracticeOne(r); };
-    const rmBtn = div.querySelector('[data-act=rm]');
-    if (rmBtn) rmBtn.onclick = () => { const a = getWrong().filter(x => x.key !== key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
-  });
+    const totalBoards = subjectOrder.reduce((n, s) => n + Object.keys(bySubject[s]).length, 0);
+    let html = '<div class="wrong-summary">'
+      + '<span class="ws-pill">共 <b>' + arr.length + '</b> 道错题</span>'
+      + '<span class="ws-pill">覆盖 <b>' + subjectOrder.length + '</b> 个科目</span>'
+      + '<span class="ws-pill">涉及 <b>' + totalBoards + '</b> 个板块</span>'
+      + '</div>';
+    subjectOrder.forEach(s => {
+      const boards = bySubject[s];
+      const sCount = Object.values(boards).reduce((n, a) => n + a.length, 0);
+      html += '<div class="wrong-group">';
+      html += '<div class="wg-head"><span class="wg-name">' + escapeHtml(s) + '</span><span class="wg-count">' + sCount + ' 道</span></div>';
+      Object.keys(boards).forEach(b => {
+        const items = boards[b];
+        html += '<div class="wg-sub">' + escapeHtml(b) + ' <span class="wg-count">' + items.length + ' 道</span></div>';
+        items.forEach((r, i) => {
+          html += '<div class="card result-item" data-key="' + escapeHtml(r.key) + '">'
+            + '<span class="tag no">✗ 答错</span>'
+            + (r.passageTitle ? '<div class="user-ans">' + escapeHtml(r.passageTitle) + '</div>' : '')
+            + '<div class="q-stem"><span class="q-no">' + (i + 1) + '.</span>' + escapeHtml(r.q.stem) + '</div>'
+            + '<div class="user-ans">正确答案：' + formatAnswer(r.q, r.q.answer) + '</div>'
+            + '<div class="explanation">解析：' + escapeHtml(r.q.explanation || '（暂无解析）') + '</div>'
+            + '<div class="bd-actions" style="margin-top:10px;">'
+            + '<button class="btn ghost sm" data-act="rep">重练此题</button>'
+            + '<button class="btn ghost sm" data-act="rm">移除</button>'
+            + '</div></div>';
+        });
+      });
+      html += '</div>';
+    });
+    box.innerHTML = html;
   } catch (e) {
-    const box = document.getElementById('wrong-list');
-    if (box) box.innerHTML = '<div class="wrong-banner">' + icon('info') + ' 示例展示 · 错题本按「科目 → 板块」分组。练习中答错的题目会自动归集到这里。</div>';
-    console.error('renderWrong error', e);
+    if (window.__showErr) window.__showErr('渲染真实错题失败：' + (e.message||e));
   }
 }
 /* 预览用：?demo=1 时塞入示例错题，方便查看分组排版（看完可用「清空错题本」还原） */
@@ -3193,6 +3200,15 @@ function bindEvents() {
   };
   $('#btn-result-home').onclick = () => { renderHome(); showView('home'); };
   $('#btn-clear-wrong').onclick = () => { if (confirm('确定清空错题本？')) { localStorage.removeItem(WRONG_KEY); renderWrong(); renderHome(); } };
+  // 错题本按钮用事件委托（容器级监听，重渲染后依然有效，避免逐项绑定失败导致空白）
+  const wl = $('#wrong-list');
+  if (wl) wl.addEventListener('click', e => {
+    const btn = e.target.closest('[data-act]'); if (!btn) return;
+    const item = e.target.closest('.result-item'); if (!item) return;
+    const key = item.dataset.key; const act = btn.dataset.act;
+    if (act === 'rep') { const r = (getWrong()||[]).find(x => x.key === key); if (r) repracticeOne(r); }
+    else if (act === 'rm') { const a = (getWrong()||[]).filter(x => x.key !== key); try { localStorage.setItem(WRONG_KEY, JSON.stringify(a)); } catch (e2) {} renderWrong(); renderHome(); }
+  });
   $('#modal-close').onclick = closeModal;
   $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
 
