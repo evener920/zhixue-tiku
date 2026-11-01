@@ -1801,7 +1801,7 @@ function bindEvents() {
 async function init() {
   const stored = loadBank();
   if (stored) BANK = stored;
-  else { try { const res = await fetch('data/questions.json'); if (res.ok) BANK = await res.json(); } catch (e) {} if (!BANK) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); }
+  else { try { const res = await fetch('data/questions.json?v=20261101'); if (res.ok) BANK = await res.json(); } catch (e) {} if (!BANK) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); }
   GRADES = BANK.grades && BANK.grades.length ? BANK.grades : [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
   SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
   if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
