@@ -1309,7 +1309,22 @@ function saveWrong(subject, board, passage, q) {
   localStorage.setItem(WRONG_KEY, JSON.stringify(arr));
 }
 let wrongDemoCache = null;
+// 不依赖题库的兜底示例：即使 questions.json 拉取失败、BANK 缺失，错题本也绝不空白
+const HARDCODED_DEMO = [
+  { key: 'demo_hw_1', subjectName: '语文', boardName: '阅读', passageTitle: '记叙文阅读', demo: true,
+    q: { id: 'demo_hw_1', type: 'single', stem: '下列加点词语在文中的含义，理解最恰当的一项是？', answer: 1,
+      options: ['表面意思', '语境中的深层含义', '作者本意', '字面反义'],
+      explanation: '结合上下文，词语在语境中产生深层含义，需联系全文主旨判断。', tags: ['词语理解'] } },
+  { key: 'demo_hw_2', subjectName: '数学', boardName: '易错专项', passageTitle: '折扣问题', demo: true,
+    q: { id: 'demo_hw_2', type: 'fill', stem: '某商品原价 200 元，打七五折后的售价是 ____ 元。', answer: '150',
+      explanation: '200 × 0.75 = 150（元）。', tags: ['百分数', '折扣'] } },
+  { key: 'demo_hw_3', subjectName: '英语', boardName: '语法', passageTitle: '时态', demo: true,
+    q: { id: 'demo_hw_3', type: 'single', stem: '— Where is Tom? — He ___ to the library.', answer: 2,
+      options: ['go', 'goes', 'has gone', 'went'],
+      explanation: '“去了图书馆”强调过去动作对现在的影响，用现在完成时。', tags: ['时态'] } }
+];
 function buildWrongDemo() {
+  if (!BANK || !BANK.subjects || !BANK.subjects.length) return HARDCODED_DEMO.slice();
   const demo = []; const usedSubj = new Set();
   for (const s of BANK.subjects) {
     if (usedSubj.has(s.id)) continue;
@@ -1328,7 +1343,9 @@ function buildWrongDemo() {
   return demo;
 }
 function renderWrong() {
+  try {
   const box = $('#wrong-list');
+  if (!box) return;
   let arr = getWrong();
   let isDemo = false;
   if (!arr.length) { if (!wrongDemoCache) wrongDemoCache = buildWrongDemo(); arr = wrongDemoCache; isDemo = true; }
@@ -1383,6 +1400,11 @@ function renderWrong() {
     const rmBtn = div.querySelector('[data-act=rm]');
     if (rmBtn) rmBtn.onclick = () => { const a = getWrong().filter(x => x.key !== key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
   });
+  } catch (e) {
+    const box = document.getElementById('wrong-list');
+    if (box) box.innerHTML = '<div class="wrong-banner">' + icon('info') + ' 示例展示 · 错题本按「科目 → 板块」分组。练习中答错的题目会自动归集到这里。</div>';
+    console.error('renderWrong error', e);
+  }
 }
 /* 预览用：?demo=1 时塞入示例错题，方便查看分组排版（看完可用「清空错题本」还原） */
 function seedWrongDemo() {
@@ -1799,12 +1821,30 @@ function bindEvents() {
 
 /* ----------------------- 启动 ----------------------- */
 async function init() {
-  const stored = loadBank();
-  if (stored) BANK = stored;
-  else { try { const res = await fetch('data/questions.json?v=20261101'); if (res.ok) BANK = await res.json(); } catch (e) {} if (!BANK) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); }
-  GRADES = BANK.grades && BANK.grades.length ? BANK.grades : [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
-  SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
-  if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
-  bindEvents(); mountIcons(); renderHome(); showView('home');
+  try {
+    const stored = loadBank();
+    if (stored && stored.subjects && stored.subjects.length) BANK = stored;
+    else {
+      let res = null;
+      try {
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 6000);
+        res = await fetch('data/questions.json?v=20261101b', { signal: ctrl.signal });
+        clearTimeout(to);
+      } catch (e) { res = null; }
+      if (res && res.ok) { try { const j = await res.json(); if (j && j.subjects && j.subjects.length) BANK = j; } catch (e) {} }
+      if (!BANK || !BANK.subjects || !BANK.subjects.length) BANK = JSON.parse(JSON.stringify(SAMPLE_BANK));
+    }
+    GRADES = BANK.grades && BANK.grades.length ? BANK.grades : [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
+    SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
+    if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
+    bindEvents(); mountIcons(); renderHome(); showView('home');
+  } catch (e) {
+    // 终极兜底：任何意外都不应导致整页白屏
+    if (!BANK || !BANK.subjects || !BANK.subjects.length) { try { BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); } catch (e2) {} }
+    GRADES = BANK.grades || [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
+    SEMESTERS = BANK.semesters || ['上学期', '下学期'];
+    try { bindEvents(); mountIcons(); renderHome(); showView('home'); } catch (e2) { console.error('init fallback failed', e2); }
+  }
 }
 init();
