@@ -1276,23 +1276,60 @@ function saveWrong(subject, board, passage, q) {
 function renderWrong() {
   const arr = getWrong();
   const box = $('#wrong-list');
-  if (!arr.length) { box.innerHTML = '<div class="empty">还没有错题，继续加油！</div>'; return; }
-  box.innerHTML = '';
-  arr.forEach((r, i) => {
-    const div = document.createElement('div');
-    div.className = 'card result-item';
-    div.innerHTML = `<span class="tag no">✗ 答错</span>
-      <div class="user-ans">${escapeHtml(r.subjectName)} · ${escapeHtml(r.boardName)} · ${escapeHtml(r.passageTitle)}</div>
-      <div class="q-stem"><span class="q-no">${i + 1}.</span>${escapeHtml(r.q.stem)}</div>
-      <div class="user-ans">正确答案：${formatAnswer(r.q, r.q.answer)}</div>
-      <div class="explanation">解析：${escapeHtml(r.q.explanation || '（暂无解析）')}</div>
-      <div class="bd-actions" style="margin-top:10px;">
-        <button class="btn ghost sm" data-act="rep">重练此题</button>
-        <button class="btn ghost sm" data-act="rm">移除</button>
-      </div>`;
-    div.querySelector('[data-act=rep]').onclick = () => repracticeOne(r);
-    div.querySelector('[data-act=rm]').onclick = () => { const a = getWrong().filter(x => x.key !== r.key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
-    box.appendChild(div);
+  if (!arr.length) {
+    box.innerHTML = '<div class="empty">还没有错题。练习中答错的题目会自动归集到这里，并按科目 → 板块分组展示，方便你集中攻克薄弱点。'
+      + '<div class="bd-actions" style="margin-top:14px;"><button class="btn primary sm" id="btn-empty-go">去做几道题</button></div></div>';
+    const ge = document.getElementById('btn-empty-go');
+    if (ge) ge.onclick = () => { renderHome(); showView('home'); };
+    return;
+  }
+  // 按「科目 → 板块」分组，与全站结构一致
+  const bySubject = {};
+  const subjectOrder = [];
+  arr.forEach(r => {
+    const s = r.subjectName || '未分类';
+    const b = r.boardName || '未分类';
+    if (!bySubject[s]) { bySubject[s] = {}; subjectOrder.push(s); }
+    if (!bySubject[s][b]) bySubject[s][b] = [];
+    bySubject[s][b].push(r);
+  });
+  const totalBoards = subjectOrder.reduce((n, s) => n + Object.keys(bySubject[s]).length, 0);
+
+  let html = '<div class="wrong-summary">'
+    + '<span class="ws-pill">' + icon('wrong') + ' 共 <b>' + arr.length + '</b> 道错题</span>'
+    + '<span class="ws-pill">' + icon('book') + ' 覆盖 <b>' + subjectOrder.length + '</b> 个科目</span>'
+    + '<span class="ws-pill">' + icon('grid') + ' 涉及 <b>' + totalBoards + '</b> 个板块</span>'
+    + '</div>';
+
+  subjectOrder.forEach(s => {
+    const boards = bySubject[s];
+    const sCount = Object.values(boards).reduce((n, a) => n + a.length, 0);
+    html += '<div class="wrong-group">';
+    html += '<div class="wg-head">' + icon('book') + '<span class="wg-name">' + escapeHtml(s) + '</span><span class="wg-count">' + sCount + ' 道</span></div>';
+    Object.keys(boards).forEach(b => {
+      const items = boards[b];
+      html += '<div class="wg-sub">' + escapeHtml(b) + ' <span class="wg-count">' + items.length + ' 道</span></div>';
+      items.forEach((r, i) => {
+        html += '<div class="card result-item" data-key="' + escapeHtml(r.key) + '">'
+          + '<span class="tag no">✗ 答错</span>'
+          + (r.passageTitle ? '<div class="user-ans">' + escapeHtml(r.passageTitle) + '</div>' : '')
+          + '<div class="q-stem"><span class="q-no">' + (i + 1) + '.</span>' + escapeHtml(r.q.stem) + '</div>'
+          + '<div class="user-ans">正确答案：' + formatAnswer(r.q, r.q.answer) + '</div>'
+          + '<div class="explanation">解析：' + escapeHtml(r.q.explanation || '（暂无解析）') + '</div>'
+          + '<div class="bd-actions" style="margin-top:10px;">'
+          + '<button class="btn ghost sm" data-act="rep">重练此题</button>'
+          + '<button class="btn ghost sm" data-act="rm">移除</button>'
+          + '</div></div>';
+      });
+    });
+    html += '</div>';
+  });
+
+  box.innerHTML = html;
+  box.querySelectorAll('.result-item').forEach(div => {
+    const key = div.dataset.key;
+    div.querySelector('[data-act=rep]').onclick = () => { const r = getWrong().find(x => x.key === key); if (r) repracticeOne(r); };
+    div.querySelector('[data-act=rm]').onclick = () => { const a = getWrong().filter(x => x.key !== key); localStorage.setItem(WRONG_KEY, JSON.stringify(a)); renderWrong(); renderHome(); };
   });
 }
 function repracticeOne(r) {
