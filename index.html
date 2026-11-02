@@ -326,6 +326,38 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
 .q-imgs .img-cell img { max-height: 140px; }
 .task-note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
 
+/* ---- 学科馆（GRIDS 学堂风格学科入口卡） ---- */
+.subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.subject-card {
+  position: relative; background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden; cursor: pointer;
+  transition: .18s; box-shadow: 0 1px 2px rgba(0,0,0,.03);
+}
+.subject-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(43,43,43,.09); border-color: var(--line-strong); }
+.sc-bar { height: 6px; background: var(--sc, var(--accent)); }
+.sc-body { padding: 22px 22px 24px; }
+.sc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sc-icon { font-size: 22px; line-height: 1; }
+.sc-name { font-family: var(--serif); font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+.sc-code { margin-left: auto; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: var(--muted); background: var(--tag-bg); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+.sc-tagline { color: var(--muted); font-size: 13.5px; line-height: 1.6; min-height: 44px; }
+.sc-meta { margin: 12px 0 16px; font-size: 13px; color: var(--ink); font-weight: 600; }
+.sc-cta { border: none; background: var(--sc, var(--accent)); color: #fff; font-weight: 700; font-size: 14px; padding: 9px 16px; border-radius: 10px; cursor: pointer; font-family: var(--sans); transition: .15s; }
+.sc-cta:hover { filter: brightness(1.06); }
+.subject-card.coming { background: #F7F4EF; border-style: dashed; cursor: default; }
+.subject-card.coming:hover { transform: none; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+.subject-card.coming .sc-bar { background: var(--line-strong); }
+.subject-card.coming .sc-name { color: var(--muted); }
+.subject-card.coming .sc-code { background: #ECE6DC; color: var(--muted); }
+.sc-soon { margin-top: 14px; display: inline-block; font-size: 12.5px; font-weight: 700; color: var(--muted); background: #ECE6DC; padding: 5px 12px; border-radius: 99px; }
+
+/* 学科面包屑（从学科馆进入某科板块列表时显示） */
+.subject-breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; }
+.bc-back { border: none; background: transparent; color: var(--accent); font-weight: 700; cursor: pointer; font-size: 14px; font-family: var(--sans); padding: 4px 6px; border-radius: 8px; }
+.bc-back:hover { background: var(--accent-soft); }
+.bc-sep { color: var(--muted); }
+.bc-cur { font-weight: 700; }
+
 </style>
 </head>
 <body>
@@ -344,7 +376,8 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
         </div>
       </div>
       <nav class="side-nav">
-        <button class="side-item active" data-view="home"><span class="si-ico" data-icon="book"></span><span>学习中心</span></button>
+        <button class="side-item active" data-view="subjects"><span class="si-ico" data-icon="grid"></span><span>学科馆</span></button>
+        <button class="side-item" data-view="home"><span class="si-ico" data-icon="book"></span><span>全部题库</span></button>
         <button class="side-item" data-view="wrong"><span class="si-ico" data-icon="wrong"></span><span>错题本</span></button>
         <button class="side-item" data-view="io"><span class="si-ico" data-icon="gear"></span><span>导入导出</span></button>
       </nav>
@@ -357,15 +390,29 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
       </div>
     </aside>
 
-    <!-- 主内容 -->
+      <!-- 主内容 -->
     <main class="main">
-      <!-- 学习中心 -->
-      <section id="view-home" class="view active">
+      <!-- 学科馆（GRIDS 学堂风格学科入口） -->
+      <section id="view-subjects" class="view active">
         <div class="page-head">
           <div class="page-head-row">
             <div>
-              <div class="tag-lead">LEARN · 学习中心</div>
-              <h1 class="page-title-serif">学习中心</h1>
+              <div class="tag-lead">ACADEMY · 学科馆</div>
+              <h1 class="page-title-serif">学科馆</h1>
+            </div>
+          </div>
+          <p class="page-intro">按学科进入，听力、阅读、词汇与真题都在这里。先选学科，再按板块分级练习；答错的题会自动归集到错题本。</p>
+        </div>
+        <div class="subject-grid" id="subject-grid"></div>
+      </section>
+
+      <!-- 学习中心 -->
+      <section id="view-home" class="view">
+        <div class="page-head">
+          <div class="page-head-row">
+            <div>
+              <div class="tag-lead">LIBRARY · 全部题库</div>
+              <h1 class="page-title-serif">全部题库</h1>
             </div>
             <div class="page-actions">
               <button class="pill-btn" id="btn-go-io"><span data-icon="download"></span> 导入 / 导出 ›</button>
@@ -388,6 +435,8 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
             <div class="pill-group" id="subject-chips"></div>
           </div>
         </div>
+
+        <div class="subject-breadcrumb" id="subject-breadcrumb" style="display:none;"></div>
 
         <div class="overview-card">
           <div class="ov-title">概览 · 学习数据</div>
@@ -507,6 +556,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
       <!-- 导入 / 导出（改为弹窗，见 openIoModal） -->
     </main>
     <nav class="bottom-nav" id="bottom-nav">
+      <button data-view="subjects"><span class="bn-ico" data-icon="grid"></span><span>学科馆</span></button>
       <button data-view="home"><span class="bn-ico" data-icon="book"></span><span>学习</span></button>
       <button data-view="wrong"><span class="bn-ico" data-icon="wrong"></span><span>错题</span></button>
       <button data-action="io"><span class="bn-ico" data-icon="gear"></span><span>管理</span></button>
@@ -24490,6 +24540,88 @@ function passageMatch(p) {
 }
 function filteredPassages(board) { return board.passages.filter(passageMatch); }
 
+/* ============== 学科馆（GRIDS 学堂风格学科入口） ============== */
+const SUBJECT_META = {
+  sub_chinese: { code: 'CHINESE',    enName: '语文', tagline: '现代文阅读 · 古诗文 · 基础知识' },
+  sub_math:    { code: 'MATH',       enName: '数学', tagline: '易错专项 · 真题卷 · 四年级每日应用题' },
+  sub_english: { code: 'ENGLISH',    enName: '英语', tagline: '听力训练 100 篇 · 阅读 · 词汇 · 语法' },
+  sub_humanity:{ code: 'HUMANITIES', enName: '人文', tagline: '历史 · 地理 · 道法', coming: true },
+  sub_science: { code: 'SCIENCE',    enName: '科学', tagline: '物质 · 生命 · 地球', coming: true },
+};
+const SUBJECT_ORDER = ['sub_chinese', 'sub_math', 'sub_english', 'sub_humanity', 'sub_science'];
+let navReturn = 'subjects';
+
+function subjectStats(s) {
+  let boards = 0, passages = 0, questions = 0;
+  (s.boards || []).forEach(b => {
+    const fps = (b.passages || []).filter(p => p.questions && p.questions.length);
+    if (fps.length) { boards++; passages += fps.length; questions += fps.reduce((n, p) => n + p.questions.length, 0); }
+  });
+  return { boards, passages, questions };
+}
+
+function renderSubjects() {
+  const grid = document.getElementById('subject-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  SUBJECT_ORDER.forEach(id => {
+    const meta = SUBJECT_META[id];
+    const s = (BANK.subjects || []).find(x => x.id === id);
+    if (meta.coming || !s) {
+      const card = document.createElement('div');
+      card.className = 'subject-card coming';
+      card.innerHTML = `
+        <div class="sc-bar"></div>
+        <div class="sc-body">
+          <div class="sc-head"><span class="sc-name">${meta.enName}</span><span class="sc-code">${meta.code}</span></div>
+          <div class="sc-tagline">${meta.tagline}</div>
+          <div class="sc-soon">敬请期待</div>
+        </div>`;
+      grid.appendChild(card);
+      return;
+    }
+    const st = subjectStats(s);
+    const color = s.color || '#5B8A72';
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.style.setProperty('--sc', color);
+    card.innerHTML = `
+        <div class="sc-bar"></div>
+        <div class="sc-body">
+          <div class="sc-head"><span class="sc-icon">${s.icon || '📘'}</span><span class="sc-name">${escapeHtml(s.name)}</span><span class="sc-code">${meta.code}</span></div>
+          <div class="sc-tagline">${meta.tagline}</div>
+          <div class="sc-meta">${st.boards} 板块 · ${st.passages} 题集 · ${st.questions} 题</div>
+          <button class="sc-cta">进入题库 →</button>
+        </div>`;
+    card.onclick = () => goSubject(id);
+    grid.appendChild(card);
+  });
+}
+
+function goSubject(sid) {
+  currentSubjectFilter = sid;
+  navReturn = 'subjects';
+  renderHome();
+  showView('home');
+}
+
+function renderSubjectBreadcrumb() {
+  const el = document.getElementById('subject-breadcrumb');
+  if (!el) return;
+  if (currentSubjectFilter === '全部') { el.style.display = 'none'; el.innerHTML = ''; return; }
+  const s = (BANK.subjects || []).find(x => x.id === currentSubjectFilter);
+  const name = s ? s.name : '该科目';
+  el.style.display = 'flex';
+  el.innerHTML = `<button class="bc-back" id="bc-back">‹ 学科馆</button><span class="bc-sep">/</span><span class="bc-cur">${escapeHtml(name)}</span>`;
+  const b = document.getElementById('bc-back');
+  if (b) b.onclick = () => { currentSubjectFilter = '全部'; navReturn = 'subjects'; renderSubjects(); showView('subjects'); };
+}
+
+function returnToLibrary() {
+  if (navReturn === 'subjects') { currentSubjectFilter = '全部'; renderSubjects(); showView('subjects'); }
+  else { renderHome(); showView('home'); }
+}
+
 /* ----------------------- 视图 ----------------------- */
 function showView(name) {
   $$('.view').forEach(v => v.classList.remove('active'));
@@ -24593,6 +24725,7 @@ function renderHome() {
     });
   });
   if (!any) grid.innerHTML = '<div class="empty">当前筛选下暂无板块，换一个年级或科目试试。</div>';
+  renderSubjectBreadcrumb();
   renderDashboard();
 }
 
@@ -25369,14 +25502,23 @@ function stopSpeech() { if ('speechSynthesis' in window) window.speechSynthesis.
 
 /* ----------------------- 事件绑定 ----------------------- */
 function bindEvents() {
-  $$('.side-item').forEach(b => b.onclick = () => { closeDrawer(); const v = b.dataset.view; if (v === 'io') { openIoModal(); return; } showView(v); if (v === 'wrong') renderWrong(); });
+  $$('.side-item').forEach(b => b.onclick = () => {
+    closeDrawer();
+    const v = b.dataset.view;
+    if (v === 'io') { openIoModal(); return; }
+    if (v === 'home') { currentSubjectFilter = '全部'; navReturn = 'home'; renderHome(); }
+    else if (v === 'subjects') { navReturn = 'subjects'; renderSubjects(); }
+    else { renderHome(); }
+    showView(v);
+    if (v === 'wrong') renderWrong();
+  });
   const goIo = $('#btn-go-io'); if (goIo) goIo.onclick = () => openIoModal();
-  $('#btn-board-back').onclick = () => { renderHome(); showView('home'); };
+  $('#btn-board-back').onclick = () => { if (navReturn === 'subjects') { currentSubjectFilter = '全部'; renderSubjects(); showView('subjects'); } else { renderHome(); showView('home'); } };
   $('#btn-subject-manage').onclick = openSubjectManage;
   $$('.child').forEach(c => c.onclick = () => { $$('.child').forEach(x => x.classList.remove('active')); c.classList.add('active'); });
   $('#btn-prev').onclick = () => { if (quiz.index > 0) { quiz.index--; renderPracticeItem(); } };
   $('#btn-next').onclick = nextItem;
-  $('#btn-practice-exit').onclick = () => { stopSpeech(); renderHome(); showView('home'); };
+  $('#btn-practice-exit').onclick = () => { stopSpeech(); returnToLibrary(); };
   $$('#mode-toggle .mode-btn').forEach(b => b.onclick = () => {
     if (b.classList.contains('active')) return;
     $$('#mode-toggle .mode-btn').forEach(x => x.classList.remove('active'));
@@ -25387,7 +25529,7 @@ function bindEvents() {
     if (list.style.display === 'none') { list.style.display = 'block'; $('#btn-result-review').textContent = '收起解析'; }
     else { list.style.display = 'none'; $('#btn-result-review').textContent = '查看解析'; }
   };
-  $('#btn-result-home').onclick = () => { renderHome(); showView('home'); };
+  $('#btn-result-home').onclick = () => { returnToLibrary(); };
   $('#btn-clear-wrong').onclick = () => { if (confirm('确定清空错题本？')) { localStorage.removeItem(WRONG_KEY); renderWrong(); renderHome(); } };
   $('#modal-close').onclick = closeModal;
   $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
@@ -25395,7 +25537,9 @@ function bindEvents() {
   $$('#bottom-nav button').forEach(b => b.onclick = () => {
     const v = b.dataset.view;
     if (b.dataset.action === 'io') { closeDrawer(); openIoModal(); return; }
-    if (v) { closeDrawer(); showView(v); if (v === 'wrong') renderWrong(); }
+    if (v === 'subjects') { closeDrawer(); navReturn = 'subjects'; renderSubjects(); showView('subjects'); }
+    else if (v === 'home') { closeDrawer(); currentSubjectFilter = '全部'; navReturn = 'home'; renderHome(); showView('home'); }
+    else if (v) { closeDrawer(); showView(v); if (v === 'wrong') renderWrong(); }
   });
   const burger = document.getElementById('hamburger');
   const scrim = document.getElementById('scrim');
@@ -25436,13 +25580,13 @@ async function init() {
     GRADES = BANK.grades && BANK.grades.length ? BANK.grades : [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
     SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
     if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
-    bindEvents(); mountIcons(); renderHome(); showView('home');
+    bindEvents(); mountIcons(); renderSubjects(); showView('subjects');
   } catch (e) {
     // 终极兜底：任何意外都不应导致整页白屏
     if (!BANK || !BANK.subjects || !BANK.subjects.length) { try { BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); } catch (e2) {} }
     GRADES = BANK.grades || [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
     SEMESTERS = BANK.semesters || ['上学期', '下学期'];
-    try { bindEvents(); mountIcons(); renderHome(); showView('home'); } catch (e2) { console.error('init fallback failed', e2); }
+    try { bindEvents(); mountIcons(); renderSubjects(); showView('subjects'); } catch (e2) { console.error('init fallback failed', e2); }
   }
 }
 init();

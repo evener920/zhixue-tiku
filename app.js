@@ -23948,6 +23948,88 @@ function passageMatch(p) {
 }
 function filteredPassages(board) { return board.passages.filter(passageMatch); }
 
+/* ============== 学科馆（GRIDS 学堂风格学科入口） ============== */
+const SUBJECT_META = {
+  sub_chinese: { code: 'CHINESE',    enName: '语文', tagline: '现代文阅读 · 古诗文 · 基础知识' },
+  sub_math:    { code: 'MATH',       enName: '数学', tagline: '易错专项 · 真题卷 · 四年级每日应用题' },
+  sub_english: { code: 'ENGLISH',    enName: '英语', tagline: '听力训练 100 篇 · 阅读 · 词汇 · 语法' },
+  sub_humanity:{ code: 'HUMANITIES', enName: '人文', tagline: '历史 · 地理 · 道法', coming: true },
+  sub_science: { code: 'SCIENCE',    enName: '科学', tagline: '物质 · 生命 · 地球', coming: true },
+};
+const SUBJECT_ORDER = ['sub_chinese', 'sub_math', 'sub_english', 'sub_humanity', 'sub_science'];
+let navReturn = 'subjects';
+
+function subjectStats(s) {
+  let boards = 0, passages = 0, questions = 0;
+  (s.boards || []).forEach(b => {
+    const fps = (b.passages || []).filter(p => p.questions && p.questions.length);
+    if (fps.length) { boards++; passages += fps.length; questions += fps.reduce((n, p) => n + p.questions.length, 0); }
+  });
+  return { boards, passages, questions };
+}
+
+function renderSubjects() {
+  const grid = document.getElementById('subject-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  SUBJECT_ORDER.forEach(id => {
+    const meta = SUBJECT_META[id];
+    const s = (BANK.subjects || []).find(x => x.id === id);
+    if (meta.coming || !s) {
+      const card = document.createElement('div');
+      card.className = 'subject-card coming';
+      card.innerHTML = `
+        <div class="sc-bar"></div>
+        <div class="sc-body">
+          <div class="sc-head"><span class="sc-name">${meta.enName}</span><span class="sc-code">${meta.code}</span></div>
+          <div class="sc-tagline">${meta.tagline}</div>
+          <div class="sc-soon">敬请期待</div>
+        </div>`;
+      grid.appendChild(card);
+      return;
+    }
+    const st = subjectStats(s);
+    const color = s.color || '#5B8A72';
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.style.setProperty('--sc', color);
+    card.innerHTML = `
+        <div class="sc-bar"></div>
+        <div class="sc-body">
+          <div class="sc-head"><span class="sc-icon">${s.icon || '📘'}</span><span class="sc-name">${escapeHtml(s.name)}</span><span class="sc-code">${meta.code}</span></div>
+          <div class="sc-tagline">${meta.tagline}</div>
+          <div class="sc-meta">${st.boards} 板块 · ${st.passages} 题集 · ${st.questions} 题</div>
+          <button class="sc-cta">进入题库 →</button>
+        </div>`;
+    card.onclick = () => goSubject(id);
+    grid.appendChild(card);
+  });
+}
+
+function goSubject(sid) {
+  currentSubjectFilter = sid;
+  navReturn = 'subjects';
+  renderHome();
+  showView('home');
+}
+
+function renderSubjectBreadcrumb() {
+  const el = document.getElementById('subject-breadcrumb');
+  if (!el) return;
+  if (currentSubjectFilter === '全部') { el.style.display = 'none'; el.innerHTML = ''; return; }
+  const s = (BANK.subjects || []).find(x => x.id === currentSubjectFilter);
+  const name = s ? s.name : '该科目';
+  el.style.display = 'flex';
+  el.innerHTML = `<button class="bc-back" id="bc-back">‹ 学科馆</button><span class="bc-sep">/</span><span class="bc-cur">${escapeHtml(name)}</span>`;
+  const b = document.getElementById('bc-back');
+  if (b) b.onclick = () => { currentSubjectFilter = '全部'; navReturn = 'subjects'; renderSubjects(); showView('subjects'); };
+}
+
+function returnToLibrary() {
+  if (navReturn === 'subjects') { currentSubjectFilter = '全部'; renderSubjects(); showView('subjects'); }
+  else { renderHome(); showView('home'); }
+}
+
 /* ----------------------- 视图 ----------------------- */
 function showView(name) {
   $$('.view').forEach(v => v.classList.remove('active'));
@@ -24051,6 +24133,7 @@ function renderHome() {
     });
   });
   if (!any) grid.innerHTML = '<div class="empty">当前筛选下暂无板块，换一个年级或科目试试。</div>';
+  renderSubjectBreadcrumb();
   renderDashboard();
 }
 
@@ -24827,14 +24910,23 @@ function stopSpeech() { if ('speechSynthesis' in window) window.speechSynthesis.
 
 /* ----------------------- 事件绑定 ----------------------- */
 function bindEvents() {
-  $$('.side-item').forEach(b => b.onclick = () => { closeDrawer(); const v = b.dataset.view; if (v === 'io') { openIoModal(); return; } showView(v); if (v === 'wrong') renderWrong(); });
+  $$('.side-item').forEach(b => b.onclick = () => {
+    closeDrawer();
+    const v = b.dataset.view;
+    if (v === 'io') { openIoModal(); return; }
+    if (v === 'home') { currentSubjectFilter = '全部'; navReturn = 'home'; renderHome(); }
+    else if (v === 'subjects') { navReturn = 'subjects'; renderSubjects(); }
+    else { renderHome(); }
+    showView(v);
+    if (v === 'wrong') renderWrong();
+  });
   const goIo = $('#btn-go-io'); if (goIo) goIo.onclick = () => openIoModal();
-  $('#btn-board-back').onclick = () => { renderHome(); showView('home'); };
+  $('#btn-board-back').onclick = () => { if (navReturn === 'subjects') { currentSubjectFilter = '全部'; renderSubjects(); showView('subjects'); } else { renderHome(); showView('home'); } };
   $('#btn-subject-manage').onclick = openSubjectManage;
   $$('.child').forEach(c => c.onclick = () => { $$('.child').forEach(x => x.classList.remove('active')); c.classList.add('active'); });
   $('#btn-prev').onclick = () => { if (quiz.index > 0) { quiz.index--; renderPracticeItem(); } };
   $('#btn-next').onclick = nextItem;
-  $('#btn-practice-exit').onclick = () => { stopSpeech(); renderHome(); showView('home'); };
+  $('#btn-practice-exit').onclick = () => { stopSpeech(); returnToLibrary(); };
   $$('#mode-toggle .mode-btn').forEach(b => b.onclick = () => {
     if (b.classList.contains('active')) return;
     $$('#mode-toggle .mode-btn').forEach(x => x.classList.remove('active'));
@@ -24845,7 +24937,7 @@ function bindEvents() {
     if (list.style.display === 'none') { list.style.display = 'block'; $('#btn-result-review').textContent = '收起解析'; }
     else { list.style.display = 'none'; $('#btn-result-review').textContent = '查看解析'; }
   };
-  $('#btn-result-home').onclick = () => { renderHome(); showView('home'); };
+  $('#btn-result-home').onclick = () => { returnToLibrary(); };
   $('#btn-clear-wrong').onclick = () => { if (confirm('确定清空错题本？')) { localStorage.removeItem(WRONG_KEY); renderWrong(); renderHome(); } };
   $('#modal-close').onclick = closeModal;
   $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
@@ -24853,7 +24945,9 @@ function bindEvents() {
   $$('#bottom-nav button').forEach(b => b.onclick = () => {
     const v = b.dataset.view;
     if (b.dataset.action === 'io') { closeDrawer(); openIoModal(); return; }
-    if (v) { closeDrawer(); showView(v); if (v === 'wrong') renderWrong(); }
+    if (v === 'subjects') { closeDrawer(); navReturn = 'subjects'; renderSubjects(); showView('subjects'); }
+    else if (v === 'home') { closeDrawer(); currentSubjectFilter = '全部'; navReturn = 'home'; renderHome(); showView('home'); }
+    else if (v) { closeDrawer(); showView(v); if (v === 'wrong') renderWrong(); }
   });
   const burger = document.getElementById('hamburger');
   const scrim = document.getElementById('scrim');
@@ -24894,13 +24988,13 @@ async function init() {
     GRADES = BANK.grades && BANK.grades.length ? BANK.grades : [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
     SEMESTERS = BANK.semesters && BANK.semesters.length ? BANK.semesters : ['上学期', '下学期'];
     if (new URLSearchParams(location.search).get('demo') === '1') seedWrongDemo();
-    bindEvents(); mountIcons(); renderHome(); showView('home');
+    bindEvents(); mountIcons(); renderSubjects(); showView('subjects');
   } catch (e) {
     // 终极兜底：任何意外都不应导致整页白屏
     if (!BANK || !BANK.subjects || !BANK.subjects.length) { try { BANK = JSON.parse(JSON.stringify(SAMPLE_BANK)); } catch (e2) {} }
     GRADES = BANK.grades || [{ name: '小学', levels: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级'] }, { name: '初中', levels: ['初一', '初二', '初三'] }, { name: '高中', levels: ['高一', '高二', '高三'] }];
     SEMESTERS = BANK.semesters || ['上学期', '下学期'];
-    try { bindEvents(); mountIcons(); renderHome(); showView('home'); } catch (e2) { console.error('init fallback failed', e2); }
+    try { bindEvents(); mountIcons(); renderSubjects(); showView('subjects'); } catch (e2) { console.error('init fallback failed', e2); }
   }
 }
 init();

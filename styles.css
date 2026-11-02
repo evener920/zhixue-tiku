@@ -314,3 +314,35 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
 .q-imgs { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 .q-imgs .img-cell img { max-height: 140px; }
 .task-note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+
+/* ---- 学科馆（GRIDS 学堂风格学科入口卡） ---- */
+.subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.subject-card {
+  position: relative; background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden; cursor: pointer;
+  transition: .18s; box-shadow: 0 1px 2px rgba(0,0,0,.03);
+}
+.subject-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(43,43,43,.09); border-color: var(--line-strong); }
+.sc-bar { height: 6px; background: var(--sc, var(--accent)); }
+.sc-body { padding: 22px 22px 24px; }
+.sc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sc-icon { font-size: 22px; line-height: 1; }
+.sc-name { font-family: var(--serif); font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+.sc-code { margin-left: auto; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: var(--muted); background: var(--tag-bg); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+.sc-tagline { color: var(--muted); font-size: 13.5px; line-height: 1.6; min-height: 44px; }
+.sc-meta { margin: 12px 0 16px; font-size: 13px; color: var(--ink); font-weight: 600; }
+.sc-cta { border: none; background: var(--sc, var(--accent)); color: #fff; font-weight: 700; font-size: 14px; padding: 9px 16px; border-radius: 10px; cursor: pointer; font-family: var(--sans); transition: .15s; }
+.sc-cta:hover { filter: brightness(1.06); }
+.subject-card.coming { background: #F7F4EF; border-style: dashed; cursor: default; }
+.subject-card.coming:hover { transform: none; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+.subject-card.coming .sc-bar { background: var(--line-strong); }
+.subject-card.coming .sc-name { color: var(--muted); }
+.subject-card.coming .sc-code { background: #ECE6DC; color: var(--muted); }
+.sc-soon { margin-top: 14px; display: inline-block; font-size: 12.5px; font-weight: 700; color: var(--muted); background: #ECE6DC; padding: 5px 12px; border-radius: 99px; }
+
+/* 学科面包屑（从学科馆进入某科板块列表时显示） */
+.subject-breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; }
+.bc-back { border: none; background: transparent; color: var(--accent); font-weight: 700; cursor: pointer; font-size: 14px; font-family: var(--sans); padding: 4px 6px; border-radius: 8px; }
+.bc-back:hover { background: var(--accent-soft); }
+.bc-sep { color: var(--muted); }
+.bc-cur { font-weight: 700; }
