@@ -24322,7 +24322,11 @@ function renderPracticeItem() {
       html += `<div class="task-note">${icon('info')} 本篇为图片听力题，请听上方音频作答，无文本题目。完成后点「下一组」继续。</div>`;
     }
   }
-  it.questions.forEach((q, qi) => { html += renderQuestionInput(q, qi); });
+  let lastSec = null;
+  it.questions.forEach((q, qi) => {
+    if (q.section && q.section !== lastSec) { html += `<div class="q-section">${escapeHtml(q.section)}</div>`; lastSec = q.section; }
+    html += renderQuestionInput(q, qi);
+  });
   box.innerHTML = html;
   $$('.opt input', box).forEach(input => input.addEventListener('change', () => {
     const q = it.questions.find(x => x.id === input.name);

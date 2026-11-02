@@ -346,3 +346,19 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-
 .bc-back:hover { background: var(--accent-soft); }
 .bc-sep { color: var(--muted); }
 .bc-cur { font-weight: 700; }
+
+/* 练习页小节标题（口算/竖式/脱式/应用题） */
+.q-section {
+  grid-column: 1 / -1;
+  margin: 18px 0 4px;
+  padding: 6px 14px;
+  font-family: var(--serif, "Songti SC", "Noto Serif SC", serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--accent);
+  background: linear-gradient(90deg, var(--accent-soft), transparent);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+}
+.q-section:first-child { margin-top: 0; }
